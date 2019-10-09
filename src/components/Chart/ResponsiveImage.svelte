@@ -8,7 +8,6 @@
   export let alt = ''
   export let widths = ''
   export let width = 0
-  export let height = 0
 
   let computedWidths = []
 
@@ -27,9 +26,10 @@
 
   $: computedAlt = alt !== '' ? alt : name === defaultName ? defaultAlt : ''
   $: computedWidths = updateWidths(widths)
-  $: maxWidth = width
-    ? width
-    : computedWidths.reduce((acc, cur) => (cur > acc ? cur : acc), 0)
+  $: maxImageWidth = computedWidths.reduce(
+    (acc, cur) => (cur > acc ? cur : acc),
+    0
+  )
   $: srcset = computedWidths.map(w => `${getFilename(name, w)} ${w}w`).join(',')
 
   /*
@@ -42,10 +42,17 @@
    */
 </script>
 
-<picture {width} {height}>
+<style global type="text/scss">
+  img {
+    object-fit: scale-down;
+    object-position: 50% 50%;
+  }
+</style>
+
+<picture>
   <img
-    sizes="(max-width: {maxWidth}px) 100vw, {maxWidth}px"
+    sizes="(max-width: {width}px) 100vw, {width}px"
     {srcset}
-    src={getFilename(name, maxWidth)}
+    src={getFilename(name, maxImageWidth)}
     alt={computedAlt} />
 </picture>

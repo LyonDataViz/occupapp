@@ -22,6 +22,6 @@
     <Sidebar />
   </div>
   <div class="main" bind:clientHeight={height} bind:clientWidth={width}>
-    <Chart height={height - 2 * padding} width={width - 2 * padding} />
+    <Chart width={width - 2 * padding} />
   </div>
 </div>
