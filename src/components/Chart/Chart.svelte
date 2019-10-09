@@ -58,7 +58,7 @@
       <!-- <ResponsiveImage name={imageName} {width} on:load={setRatioFrom} /> -->
       <Image name={$imageName} {width} on:load={setRatioFrom} />
       {#if !hideOverlay}
-        <Partition />
+        <Partition {height} {width} />
         <svg {height} {width} viewBox="0 0 {width} {height}">
           <Points {height} {width} />
         </svg>
