@@ -7,6 +7,8 @@
   export let name = defaultName
   export let alt = ''
   export let widths = ''
+  export let width = 0
+  export let height = 0
 
   let computedWidths = []
 
@@ -25,11 +27,10 @@
 
   $: computedAlt = alt !== '' ? alt : name === defaultName ? defaultAlt : ''
   $: computedWidths = updateWidths(widths)
-  $: maxWidth = computedWidths.reduce((acc, cur) => (cur > acc ? cur : acc), 0)
-  $: srcset = computedWidths.reduce(
-    (acc, cur) => `${acc}, ${getFilename(name, cur)} ${cur}w`,
-    ''
-  )
+  $: maxWidth = width
+    ? width
+    : computedWidths.reduce((acc, cur) => (cur > acc ? cur : acc), 0)
+  $: srcset = computedWidths.map(w => `${getFilename(name, w)} ${w}w`).join(',')
 
   /*
    * See https://github.com/severo/pictures
@@ -41,7 +42,7 @@
    */
 </script>
 
-<picture>
+<picture {width} {height}>
   <img
     sizes="(max-width: {maxWidth}px) 100vw, {maxWidth}px"
     {srcset}
