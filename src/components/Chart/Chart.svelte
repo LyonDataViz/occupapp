@@ -1,6 +1,7 @@
 <script>
   import Image from 'components/Image.svelte'
   // import ResponsiveImage from 'components/ResponsiveImage.svelte'
+  import { imageName } from 'modules/stores.js'
 
   // Properties
   let outerWidth = 0
@@ -26,8 +27,6 @@
   $: width = toLowerStep(outerWidth)
   $: height = ratio * width
 
-  const imageName = 'petanque'
-
   $: showChart = widthOK
 </script>
 
@@ -47,7 +46,7 @@
   {#if showChart}
     <div class="inner">
       <!-- <ResponsiveImage name={imageName} {width} on:load={setRatioFrom} /> -->
-      <Image name={imageName} {width} on:load={setRatioFrom} />
+      <Image name={$imageName} {width} on:load={setRatioFrom} />
       <svg {height} {width} viewBox="0 0 {width} {height}">
         <rect width="100%" height="100%" style="fill: red;" opacity="0.2" />
       </svg>

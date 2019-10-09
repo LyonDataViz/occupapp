@@ -1,0 +1,20 @@
+<script>
+  export let color = 'color-green-5'
+</script>
+
+<style>
+
+</style>
+
+<!-- <%= octicon "primitive-dot", class: "color-green-5 ml-2 float-right" %> -->
+<svg
+  version="1.1"
+  width="8"
+  height="16"
+  viewBox="0 0 8 16"
+  class="octicon octicon-primitive-dot {color} ml-2 "
+  aria-hidden="true">
+  <path
+    fill-rule="evenodd"
+    d="M0 8c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4z" />
+</svg>
