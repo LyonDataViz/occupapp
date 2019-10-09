@@ -14,15 +14,13 @@
   const updateWidths = widths => {
     const computedWidths = widths
       .split(',')
-      .map(width => +width)
-      .filter(
-        width => width > 0 && width < 4000 && availableWidths.includes(width)
-      )
+      .map(w => +w)
+      .filter(w => w > 0 && w < 4000 && availableWidths.includes(w))
       .sort((a, b) => a > b)
     return computedWidths.length === 0 ? defaultWidths : computedWidths
   }
-  const getFilename = (name, width) =>
-    `https://github.com/severo/pictures/raw/master/images,w_${width}/${name}.jpg`
+  const getFilename = (name, w) =>
+    `https://github.com/severo/pictures/raw/master/images,w_${w}/${name}.jpg`
 
   $: computedAlt = alt !== '' ? alt : name === defaultName ? defaultAlt : ''
   $: computedWidths = updateWidths(widths)
@@ -31,6 +29,7 @@
     0
   )
   $: srcset = computedWidths.map(w => `${getFilename(name, w)} ${w}w`).join(',')
+  $: src = getFilename(name, maxImageWidth)
 
   /*
    * See https://github.com/severo/pictures
@@ -42,17 +41,17 @@
    */
 </script>
 
-<style global type="text/scss">
+<style type="text/scss">
   img {
-    object-fit: scale-down;
-    object-position: 50% 50%;
+    object-fit: contain;
   }
 </style>
 
 <picture>
   <img
+    on:load
+    alt={computedAlt}
+    {src}
     sizes="(max-width: {width}px) 100vw, {width}px"
-    {srcset}
-    src={getFilename(name, maxImageWidth)}
-    alt={computedAlt} />
+    {srcset} />
 </picture>
