@@ -1,29 +1,5 @@
 @import '@primer/css/index.scss';
 
-:root {
-  --col-primary-100: hsl(223, 88%, 97%);
-  --col-primary-200: hsl(223, 72%, 90%);
-  --col-primary-300: hsl(223, 71%, 76%);
-  --col-primary-400: hsl(227, 63%, 67%);
-  --col-primary-500: hsl(230, 65%, 63%);
-  --col-primary-600: hsl(230, 52%, 53%);
-  --col-primary-700: hsl(230, 51%, 43%);
-  --col-primary-800: hsl(230, 57%, 34%);
-  --col-primary-900: hsl(230, 56%, 27%);
-
-  --col-grey-100: hsl(210, 17%, 98%);
-  --col-grey-200: hsl(207, 22%, 90%);
-  --col-grey-300: hsl(210, 24%, 87%);
-  --col-grey-400: hsl(208, 17%, 83%);
-  --col-grey-500: hsl(209, 24%, 74%);
-  --col-grey-600: hsl(215, 17%, 63%);
-  --col-grey-700: hsl(214, 11%, 49%);
-  --col-grey-800: hsl(215, 17%, 30%);
-  --col-grey-900: hsl(215, 22%, 17%);
-
-  // color: var(--col-grey-900);
-}
-
 .pagehead {
   position: relative;
   padding-top: $spacer-4;
