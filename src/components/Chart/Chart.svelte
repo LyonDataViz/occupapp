@@ -1,6 +1,6 @@
 <script>
-  import Image from 'components/Chart/Image.svelte'
-  // import ResponsiveImage from 'components/Chart/ResponsiveImage.svelte'
+  import Image from 'components/Image.svelte'
+  // import ResponsiveImage from 'components/ResponsiveImage.svelte'
 
   // Properties
   let outerWidth = 0

@@ -8,6 +8,8 @@
   export let alt = ''
   export let widths = ''
   export let width = 0
+  let className = ''
+  export { className as class }
 
   let computedWidths = []
 
@@ -53,5 +55,6 @@
     alt={computedAlt}
     {src}
     sizes="(max-width: {width}px) 100vw, {width}px"
-    {srcset} />
+    {srcset}
+    class={className} />
 </picture>
