@@ -43,7 +43,7 @@
 
 <picture>
   <img
-    sizes="(max-width: ${maxWidth}px) 100vw, ${maxWidth}px"
+    sizes="(max-width: {maxWidth}px) 100vw, {maxWidth}px"
     {srcset}
     src={getFilename(name, maxWidth)}
     alt={computedAlt} />
