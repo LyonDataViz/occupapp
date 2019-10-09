@@ -1,5 +1,7 @@
 <script>
   import Image from 'components/Image.svelte'
+  import Points from 'components/Chart/Points.svelte'
+  import Partition from 'components/Chart/Partition.svelte'
   // import ResponsiveImage from 'components/ResponsiveImage.svelte'
   import { imageName } from 'modules/stores.js'
 
@@ -48,7 +50,8 @@
       <!-- <ResponsiveImage name={imageName} {width} on:load={setRatioFrom} /> -->
       <Image name={$imageName} {width} on:load={setRatioFrom} />
       <svg {height} {width} viewBox="0 0 {width} {height}">
-        <rect width="100%" height="100%" style="fill: red;" opacity="0.2" />
+        <Partition />
+        <Points {height} {width} />
       </svg>
     </div>
   {/if}
