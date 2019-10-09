@@ -25,17 +25,25 @@
   const setRatioFrom = event => {
     const img = event.target
     ratio = img.height / img.width
+    hideOverlay = false
   }
   $: width = toLowerStep(outerWidth)
   $: height = ratio * width
 
   $: showChart = widthOK
+
+  // Hide the overlay when the image is loading, and the dimensions are unknown
+  let hideOverlay = true
+  $: if ($imageName) {
+    hideOverlay = true
+  }
 </script>
 
 <style type="text/scss">
   .inner {
     position: relative;
   }
+
   svg {
     position: absolute;
     top: 0;
@@ -49,10 +57,12 @@
     <div class="inner">
       <!-- <ResponsiveImage name={imageName} {width} on:load={setRatioFrom} /> -->
       <Image name={$imageName} {width} on:load={setRatioFrom} />
-      <svg {height} {width} viewBox="0 0 {width} {height}">
+      {#if !hideOverlay}
         <Partition />
-        <Points {height} {width} />
-      </svg>
+        <svg {height} {width} viewBox="0 0 {width} {height}">
+          <Points {height} {width} />
+        </svg>
+      {/if}
     </div>
   {/if}
 </div>
