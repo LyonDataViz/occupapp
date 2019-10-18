@@ -1,8 +1,19 @@
 <template>
-  <v-app>
+  <v-app id="keep">
+    <v-app-bar
+      app
+      clipped-left
+      color="amber"
+    >
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <span class="title ml-3 mr-5">Occupap&nbsp;<span class="font-weight-light">Voronoï</span></span>
+    </v-app-bar>
+
     <v-navigation-drawer
+      v-model="drawer"
       app
       clipped
+      color="grey lighten-4"
     >
       <v-list>
         <v-list-item
@@ -30,25 +41,9 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      clipped-left
-    >
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
-      <v-spacer />
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-app-bar>
-
+    <!-- Sizes your content based upon application components -->
     <v-content>
+      <!-- Provides the application the proper gutter -->
       <v-container fluid>
         <v-fade-transition mode="out-in">
           <router-view />
@@ -64,6 +59,7 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'App',
   data: () => ({
+    drawer: null
     //
   })
 })
@@ -71,4 +67,7 @@ export default Vue.extend({
 
 <style lang="sass">
   @import '../node_modules/typeface-roboto/index.css'
+  #keep .v-navigation-drawer__border
+    display: none
+
 </style>
