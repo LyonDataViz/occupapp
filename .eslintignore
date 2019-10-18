@@ -1,0 +1,3 @@
+# See https://github.com/eslint/eslint/issues/10341
+!.*
+node_modules

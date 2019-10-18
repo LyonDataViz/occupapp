@@ -50,6 +50,12 @@ Other targets:
 
 Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
 
+To lint with Atom Editor, install linter-eslint, add
+`, source.ts, text.html.vue` to the List of scope, uncomment Lint HTML files:
+
+- https://alligator.io/vuejs/vue-eslint-plugin/
+- https://github.com/vuejs/eslint-plugin-vue/issues/371#issuecomment-364652923
+
 ## Documentation
 
 Project developed for the [LIRIS M2i project](https://projet.liris.cnrs.fr/mi2/)
