@@ -6,7 +6,7 @@
       color="amber"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <span class="title ml-3 mr-5">Occupap&nbsp;<span class="font-weight-light">Voronoï</span></span>
+      <span class="title ml-3 mr-5">Occupapp&nbsp;<span class="font-weight-light">Voronoï</span></span>
     </v-app-bar>
 
     <v-navigation-drawer
