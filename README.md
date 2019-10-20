@@ -48,7 +48,7 @@ Other targets:
   npm run lint
   ```
 
-Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
+Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/). Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading Vue CLI with `npm install -g @vue/cli`).
 
 To lint with Atom Editor, install linter-eslint, add
 `, source.ts, text.html.vue` to the List of scope, uncomment Lint HTML files:
