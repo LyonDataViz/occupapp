@@ -33,16 +33,16 @@ export default {
   methods: {
     getWidth () {
       return this.$refs.home.clientWidth
-    },
-    onResize () {
-      console.log('HOLA')
-
-      this.isResizing = true
-      this.width = this.getWidth()
-      setTimeout(1000, () => {
-        console.log('OK')
-        this.isResizing = false
-      })
+    // },
+    // onResize () {
+    //   console.log('HOLA')
+    //
+    //   this.isResizing = true
+    //   this.width = this.getWidth()
+    //   setTimeout(1000, () => {
+    //     console.log('OK')
+    //     this.isResizing = false
+    //   })
     }
   },
 
