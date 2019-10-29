@@ -76,8 +76,9 @@ export default {
   methods: {
     resize: function () {
       // Adapted from https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
-      let width = this.container.clientWidth
-      let height = this.container.clientHeight
+      const scale = window.devicePixelRatio
+      let width = this.container.clientWidth * scale
+      let height = this.container.clientHeight * scale
       if (width > height * this.aspectRatio) {
         width = Math.floor(height * this.aspectRatio)
       } else {
@@ -86,6 +87,8 @@ export default {
       if (this.canvas.width !== width || this.canvas.height !== height) {
         this.canvas.width = width
         this.canvas.height = height
+        this.canvas.style.width = (width / scale) + 'px'
+        this.canvas.style.height = (height / scale) + 'px'
         return true
       }
       return false
@@ -106,6 +109,7 @@ export default {
     },
     drawStuff: function () {
       // Redraw & reposition content
+      // ctx.scale(scale, scale);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.ctx.drawImage(this.loadedImage, 0, 0, this.canvas.width, this.canvas.height)
 
