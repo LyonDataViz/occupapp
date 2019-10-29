@@ -5,6 +5,7 @@
       clipped-left
       color="amber"
     >
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
       <router-link
         class="title ml-3 mr-5"
         :to="{path: '/'}"
@@ -14,9 +15,9 @@
     </v-app-bar>
 
     <v-navigation-drawer
+      v-model="drawer"
       app
       clipped
-      permanent
       mini-variant
     >
       <Gallery />
@@ -24,12 +25,9 @@
 
     <!-- Sizes your content based upon application components -->
     <v-content>
-      <!-- Provides the application the proper gutter -->
-      <v-container fluid>
-        <v-fade-transition mode="out-in">
-          <router-view />
-        </v-fade-transition>
-      </v-container>
+      <v-fade-transition mode="out-in">
+        <router-view />
+      </v-fade-transition>
     </v-content>
   </v-app>
 </template>
@@ -41,6 +39,7 @@ import Gallery from '@/components/Gallery.vue'
 export default Vue.extend({
   name: 'App',
   data: () => ({
+    drawer: null
   }),
   components: {
     Gallery
@@ -50,6 +49,8 @@ export default Vue.extend({
 
 <style lang="sass">
   @import '../node_modules/typeface-roboto/index.css'
+  .v-content
+    height: 100vh
   #keep .v-app-bar .title
     color: inherit
     text-decoration: none
