@@ -63,8 +63,7 @@ export default Vue.extend({
       'spider',
       'wolves',
       'bazzania'
-    ],
-    selected: 0
+    ]
   }),
   computed: {
     images: function () {
@@ -74,6 +73,14 @@ export default Vue.extend({
           url: `https://github.com/severo/pictures/raw/master/images,w_${this.width}/${name}.jpg`
         }
       })
+    },
+    selected: {
+      get () {
+        return this.$store.state.image
+      },
+      set (value) {
+        this.$store.commit('updateImage', value)
+      }
     }
   }
 })

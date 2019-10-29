@@ -25,18 +25,31 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
   data: function () {
     return {
-      needToRender: true,
-      aspectRatio: 1, // for the image
       debounceTimer: 0,
-      isResizing: false
+      isResizing: false,
+      imageWidths: [320, 640, 768, 1024, 1366, 1600, 1920],
+      names: [
+        'petanque',
+        'boats',
+        'honeycomb',
+        'spider',
+        'wolves',
+        'bazzania'
+      ],
+      loadedImage: new Image(),
+      debug: false
     }
   },
   computed: {
+    aspectRatio: function () {
+      return (this.loadedImage.naturalHeight) ? this.loadedImage.naturalWidth / this.loadedImage.naturalHeight : 1
+    },
     canvas: function () {
       return this.$refs.imagecanvas
     },
@@ -51,7 +64,14 @@ export default {
     },
     showCanvas: function () {
       return !this.isResizing
-    }
+    },
+    name: function () {
+      return this.names[this.image]
+    },
+    maxImageWidth: function () {
+      return this.imageWidths[this.imageWidths.length - 1]
+    },
+    ...mapState(['image'])
   },
   methods: {
     resize: function () {
@@ -73,27 +93,51 @@ export default {
     checkRender: function () {
       if (this.resize() || this.needToRender) {
         this.needToRender = false
-        this.isResizing = true
 
+        this.isResizing = true
         // See https://stackoverflow.com/a/37588776/7351594
         clearTimeout(this.debounceTimer)
         this.debounceTimer = setTimeout(function () {
           this.drawStuff()
           this.isResizing = false
-        }.bind(this), 200)
+        }.bind(this), 150)
       }
       requestAnimationFrame(this.checkRender)
     },
     drawStuff: function () {
       // Redraw & reposition content
-      const resizeText = 'Canvas width: ' + this.canvas.width + 'px'
-      this.ctx.textAlign = 'center'
-      this.ctx.fillStyle = '#000'
-      this.ctx.fillText(resizeText, this.canvas.width / 2, this.canvas.height / 2)
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(this.loadedImage, 0, 0, this.canvas.width, this.canvas.height)
+
+      if (this.debug) {
+        const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + this.name
+        this.ctx.textAlign = 'center'
+        this.ctx.fillStyle = '#000'
+        this.ctx.fillText(resizeText, this.canvas.width / 2, this.canvas.height / 2)
+      }
+    },
+    getImageFilename: function (name, w) {
+      return `https://github.com/severo/pictures/raw/master/images,w_${w}/${name}.jpg`
+    },
+    test: function (img) {
+      this.loadedImage = img
+      this.needToRender = true
+    },
+    createImage: function () {
+      const img = new Image()
+      img.onload = () => this.test(img)
+      img.src = this.getImageFilename(this.name, this.maxImageWidth)
+      img.srcset = this.imageWidths.map(w => `${this.getImageFilename(this.name, w)} ${w}w`).join(',')
     }
   },
   mounted: function () {
+    this.createImage()
     this.checkRender()
+  },
+  watch: {
+    name: function (val, oldVal) {
+      this.createImage()
+    }
   }
 }
 </script>
