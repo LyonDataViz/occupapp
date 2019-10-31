@@ -48,10 +48,15 @@ Other targets:
   npm run lint
   ```
 
-Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/). Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading Vue CLI with `npm install -g @vue/cli`).
+Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
+Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading
+Vue CLI with `npm install -g @vue/cli`).
 
 To lint with Atom Editor, install linter-eslint, add
-`, source.ts, text.html.vue` to the List of scope, uncomment Lint HTML files:
+`, source.ts, text.html.vue` to the "List of scopes", and unselect "Lint HTML
+files". Note that I don't know how to get Typescript linting in Atom: I just
+launch `npm run serve`, and see the result of the type checking done through
+Webpack. Some references:
 
 - https://alligator.io/vuejs/vue-eslint-plugin/
 - https://github.com/vuejs/eslint-plugin-vue/issues/371#issuecomment-364652923
