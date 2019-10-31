@@ -16,22 +16,12 @@
 // https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
-const Props = Vue.extend({
-  props: {
-    width: {
-      type: Number,
-      default: 300
-    },
-    height: {
-      type: Number,
-      default: 150
-    }
-  }
-})
+import { Prop } from 'vue-property-decorator'
 
 @Component
-export default class Handles extends Props {
+export default class Handles extends Vue {
+  @Prop({ default: 300 }) readonly width!: number
+  @Prop({ default: 150 }) readonly height!: number
   get viewbox (): string {
     return `0 0 ${this.width} ${this.height}`
   }
