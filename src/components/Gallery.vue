@@ -51,9 +51,6 @@
 </style>
 
 <script lang="ts">
-// Class-Style Vue Component. See
-// https://vuejs.org/v2/guide/typescript.html#Basic-Usage and
-// https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'

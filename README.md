@@ -61,6 +61,12 @@ Webpack. Some references:
 - https://alligator.io/vuejs/vue-eslint-plugin/
 - https://github.com/vuejs/eslint-plugin-vue/issues/371#issuecomment-364652923
 
+The Vue components are developed as TypeScript classes. See:
+
+- https://vuejs.org/v2/guide/typescript.html#Basic-Usage
+- https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
+- https://github.com/kaorun343/vue-property-decorator
+
 ## Documentation
 
 Project developed for the [LIRIS M2i project](https://projet.liris.cnrs.fr/mi2/)
