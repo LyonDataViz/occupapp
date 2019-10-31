@@ -18,6 +18,7 @@
         />
         <canvas
           id="image-canvas"
+          class="first"
           ref="imagecanvas"
           v-show="showCanvas"
           :width="canvasWidth"
@@ -26,6 +27,7 @@
         />
         <svg
           id="image-svg"
+      class='second'
           ref="imagesvg"
           v-show="showSvg"
           :viewBox="viewbox"
@@ -205,9 +207,11 @@ export default {
 <style lang="sass">
   div#image-wrapper
     position: relative
-  svg#image-svg
-    position: absolute
-    top: 0
-    left: 0
-    z-index: 2
+    .first
+      display: block
+    .second
+      position: absolute
+      top: 0
+      left: 0
+      z-index: 2
 </style>
