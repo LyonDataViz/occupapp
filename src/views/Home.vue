@@ -198,6 +198,7 @@ export default class Home extends Vue {
     this.needToRender = true
   }
   createImage () {
+    this.isResizing = true
     const img = new Image()
     img.onload = () => this.updateFromLoadedImage(img)
     img.src = this.getImageFilename(this.name, this.maxImageWidth)
