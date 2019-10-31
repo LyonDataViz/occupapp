@@ -53,6 +53,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
+// Vue.extend -> see: https://vuejs.org/v2/guide/typescript.html#Basic-Usage
 export default Vue.extend({
   data: () => ({
     width: 320,

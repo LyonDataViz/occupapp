@@ -25,19 +25,13 @@
           :height="canvasHeight"
           :style="canvasStyle"
         />
-        <svg
-          id="image-svg"
-      class='second'
-          ref="imagesvg"
-          v-show="showSvg"
-          :viewBox="viewbox"
-          :style="svgStyle"
-        ><circle
-          :cx="cx"
-          :cy="cy"
-          r="10"
+        <Handles
+          id="absolute"
+          class="second"
+          v-show="showHandles"
+          :width="width"
+          :height="height"
         />
-        </svg>
       </div>
     </v-row>
   </v-container>
@@ -45,6 +39,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import Handles from '@/components/Handles.vue'
 
 export default {
   name: 'Home',
@@ -68,6 +63,9 @@ export default {
       devicePixelRatio: 1
     }
   },
+  components: {
+    Handles
+  },
   computed: {
     aspectRatio: function () {
       return (this.loadedImage.naturalHeight) ? this.loadedImage.naturalWidth / this.loadedImage.naturalHeight : 1
@@ -78,9 +76,6 @@ export default {
     ctx: function () {
       return this.canvas.getContext('2d')
     },
-    svg: function () {
-      return this.$refs.imagesvg
-    },
     container: function () {
       return this.$refs.container
     },
@@ -90,7 +85,7 @@ export default {
     showCanvas: function () {
       return !this.isResizing
     },
-    showSvg: function () {
+    showHandles: function () {
       return !this.isResizing
     },
     name: function () {
@@ -110,18 +105,6 @@ export default {
         width: `${this.width}px`,
         height: `${this.height}px`
       }
-    },
-    viewbox: function () {
-      return `0 0 ${this.width} ${this.height}`
-    },
-    svgStyle: function () {
-      return this.canvasStyle
-    },
-    cx: function () {
-      return this.width / 2
-    },
-    cy: function () {
-      return this.height / 2
     },
     ...mapState(['image'])
   },
