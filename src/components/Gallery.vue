@@ -51,38 +51,38 @@
 </style>
 
 <script lang="ts">
+// Class-Style Vue Component. See
+// https://vuejs.org/v2/guide/typescript.html#Basic-Usage and
+// https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-// Vue.extend -> see: https://vuejs.org/v2/guide/typescript.html#Basic-Usage
-export default Vue.extend({
-  data: () => ({
-    width: 320,
-    names: [
-      'petanque',
-      'boats',
-      'honeycomb',
-      'spider',
-      'wolves',
-      'bazzania'
-    ]
-  }),
-  computed: {
-    images: function () {
-      return this.names.map(name => {
-        return {
-          name: name,
-          url: `https://github.com/severo/pictures/raw/master/images,w_${this.width}/${name}.jpg`
-        }
-      })
-    },
-    selected: {
-      get () {
-        return this.$store.state.image
-      },
-      set (value) {
-        this.$store.commit('updateImage', value)
+@Component
+export default class Handles extends Vue {
+  width = 320
+  names= [
+    'petanque',
+    'boats',
+    'honeycomb',
+    'spider',
+    'wolves',
+    'bazzania'
+  ]
+
+  get images () {
+    return this.names.map(name => {
+      return {
+        name: name,
+        url: `https://github.com/severo/pictures/raw/master/images,w_${this.width}/${name}.jpg`
       }
-    }
+    })
   }
-})
+  get selected () {
+    return this.$store.state.image
+  }
+  set selected (value) {
+    this.$store.commit('updateImage', value)
+  }
+}
 </script>
