@@ -61,7 +61,7 @@ import { Prop } from 'vue-property-decorator'
 @Component
 export default class Handles extends Vue {
   width = 320
-  names= [
+  names = [
     'petanque',
     'boats',
     'honeycomb',
@@ -70,7 +70,7 @@ export default class Handles extends Vue {
     'bazzania'
   ]
 
-  get images () {
+  get images (): {name: string, url: string}[] {
     return this.names.map(name => {
       return {
         name: name,
@@ -78,10 +78,10 @@ export default class Handles extends Vue {
       }
     })
   }
-  get selected () {
+  get selected (): number {
     return this.$store.state.image
   }
-  set selected (value) {
+  set selected (value: number) {
     this.$store.commit('updateImage', value)
   }
 }

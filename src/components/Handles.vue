@@ -25,7 +25,7 @@ export default class Handles extends Vue {
   get viewbox (): string {
     return `0 0 ${this.width} ${this.height}`
   }
-  get svgStyle () {
+  get svgStyle (): {width: string, height: string} {
     return {
       width: `${this.width}px`,
       height: `${this.height}px`
