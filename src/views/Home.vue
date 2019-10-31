@@ -16,17 +16,15 @@
           type="card"
           v-show="showPlaceholder"
         />
-        <canvas
-          id="image-canvas"
+        <Background
+          ref="background"
           class="first"
-          ref="imagecanvas"
-          v-show="showCanvas"
-          :width="canvasWidth"
-          :height="canvasHeight"
-          :style="canvasStyle"
+          v-show="showBackground"
+          :width="width"
+          :height="height"
+          :device-pixel-ratio="devicePixelRatio"
         />
         <Handles
-          id="absolute"
           class="second"
           v-show="showHandles"
           :width="width"
@@ -43,10 +41,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Watch } from 'vue-property-decorator'
 
+import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
 
 @Component({
   components: {
+    Background,
     Handles
   },
   // Vuex's component binding helper can use here
@@ -68,7 +68,6 @@ export default class Home extends Vue {
     'bazzania'
   ]
   loadedImage: HTMLImageElement = new Image()
-  debug = false
   width = 300 // in CSS px
   height = 150 // in CSS px
   devicePixelRatio = 1
@@ -76,7 +75,7 @@ export default class Home extends Vue {
 
   // annotate refs type
   $refs!: {
-    imagecanvas: HTMLCanvasElement,
+    background: Background
     container: HTMLElement
   }
 
@@ -95,41 +94,23 @@ export default class Home extends Vue {
   get aspectRatio () {
     return (this.loadedImage.naturalHeight) ? this.loadedImage.naturalWidth / this.loadedImage.naturalHeight : 1
   }
-  get canvas (): HTMLCanvasElement {
-    return this.$refs.imagecanvas
-  }
   get container (): HTMLElement {
     return this.$refs.container
-  }
-  get ctx (): CanvasRenderingContext2D | null {
-    return this.canvas.getContext('2d')
   }
   get showPlaceholder () {
     return this.isResizing
   }
-  get showCanvas () {
+  get showBackground () {
     return !this.isResizing
   }
   get showHandles () {
     return !this.isResizing
   }
-  get name () {
+  get imageName () {
     return this.names[this.image]
   }
   get maxImageWidth () {
     return this.imageWidths[this.imageWidths.length - 1]
-  }
-  get canvasWidth () {
-    return this.width * this.devicePixelRatio
-  }
-  get canvasHeight () {
-    return this.height * this.devicePixelRatio
-  }
-  get canvasStyle () {
-    return {
-      width: `${this.width}px`,
-      height: `${this.height}px`
-    }
   }
 
   // methods
@@ -167,26 +148,16 @@ export default class Home extends Vue {
       this.debounceTimer = setTimeout(() => {
         // Note how we use an arrow function to get access to the "this" object
         // See https://stackoverflow.com/a/38737108/7351594
-        this.drawStuff()
+
+        // TODO use Vuex or an Event Bus to reduce coupling with Background component
+        // see https://stackoverflow.com/a/57421451/7351594
+        (this.$refs.background as Background & { drawStuff: (image: HTMLImageElement, imageName: string) => void }).drawStuff(this.loadedImage, this.imageName)
         this.isResizing = false
       }, 150)
     }
     requestAnimationFrame(this.checkRender)
   }
-  drawStuff () {
-    if (this.ctx === null) { return }
-    // Redraw & reposition content
-    this.ctx.setTransform(this.devicePixelRatio, 0, 0, this.devicePixelRatio, 0, 0)
-    this.ctx.clearRect(0, 0, this.width, this.height)
-    this.ctx.drawImage(this.loadedImage, 0, 0, this.width, this.height)
 
-    if (this.debug) {
-      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + this.name
-      this.ctx.textAlign = 'center'
-      this.ctx.fillStyle = '#000'
-      this.ctx.fillText(resizeText, this.width / 2, this.height / 2)
-    }
-  }
   getImageFilename (name: string, w: string) {
     return `https://github.com/severo/pictures/raw/master/images,w_${w}/${name}.jpg`
   }
@@ -198,10 +169,10 @@ export default class Home extends Vue {
     this.isResizing = true
     const img = new Image()
     img.onload = () => this.updateFromLoadedImage(img)
-    img.src = this.getImageFilename(this.name, this.maxImageWidth)
-    img.srcset = this.imageWidths.map(w => `${this.getImageFilename(this.name, w)} ${w}w`).join(',')
+    img.src = this.getImageFilename(this.imageName, this.maxImageWidth)
+    img.srcset = this.imageWidths.map(w => `${this.getImageFilename(this.imageName, w)} ${w}w`).join(',')
   }
-  @Watch('name')
+  @Watch('imageName')
   onNameChanged (val: string, oldVal: string) {
     this.createImage()
   }
