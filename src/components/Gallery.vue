@@ -61,17 +61,9 @@ const pictures = getModule(Pictures)
 @Component
 export default class Handles extends Vue {
   width = 320
-  names = [
-    'petanque',
-    'boats',
-    'honeycomb',
-    'spider',
-    'wolves',
-    'bazzania'
-  ]
 
   get srcs (): string[] {
-    return this.names.map(name => `https://github.com/severo/pictures/raw/master/images,w_${this.width}/${name}.jpg`)
+    return pictures.srcs(this.width)
   }
   get selected (): number {
     return pictures.selected
