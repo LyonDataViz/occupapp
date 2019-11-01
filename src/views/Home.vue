@@ -41,12 +41,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Watch } from 'vue-property-decorator'
 import { getModule } from 'vuex-module-decorators'
-import Picture from '@/store/picture.ts'
+import Pictures from '@/store/pictures.ts'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
 
-const picture = getModule(Picture)
+const pictures = getModule(Pictures)
 
 @Component({
   components: {
@@ -103,7 +103,7 @@ export default class Home extends Vue {
     return !this.isResizing
   }
   get imageName () {
-    return this.names[picture.idx]
+    return this.names[pictures.selected]
   }
   get maxImageWidth () {
     return this.imageWidths[this.imageWidths.length - 1]

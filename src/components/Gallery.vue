@@ -55,8 +55,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import { getModule } from 'vuex-module-decorators'
-import Picture from '@/store/picture.ts'
-const picture = getModule(Picture)
+import Pictures from '@/store/pictures.ts'
+const pictures = getModule(Pictures)
 
 @Component
 export default class Handles extends Vue {
@@ -79,10 +79,10 @@ export default class Handles extends Vue {
     })
   }
   get selected (): number {
-    return picture.idx
+    return pictures.selected
   }
   set selected (value: number) {
-    picture.updateIdx(value)
+    pictures.select(value)
   }
 }
 </script>

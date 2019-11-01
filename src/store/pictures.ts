@@ -2,12 +2,12 @@
 import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 
-@Module({ dynamic: true, store, name: 'picture' })
-export default class Picture extends VuexModule {
-  idx: number = 0
+@Module({ dynamic: true, store, name: 'pictures' })
+export default class Pictures extends VuexModule {
+  selected: number = 0
 
   @Mutation
-  updateIdx (idx: number) {
-    this.idx = idx
+  select (idx: number) {
+    this.selected = idx
   }
 }
