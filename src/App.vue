@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 import Gallery from '@/components/Gallery.vue'
 
 export default Vue.extend({

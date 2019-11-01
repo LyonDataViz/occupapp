@@ -53,9 +53,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
 import { getModule } from 'vuex-module-decorators'
+
 import Pictures from '@/store/pictures.ts'
+
 const pictures = getModule(Pictures)
 
 @Component
