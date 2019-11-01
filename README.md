@@ -67,6 +67,9 @@ The Vue components are developed as TypeScript classes. See:
 - https://github.com/vuejs/vue-class-component/blob/master/example/src/App.vue
 - https://github.com/kaorun343/vue-property-decorator
 
+The Vuex stores are dynamic modules, and use Typescript. See
+https://championswimmer.in/vuex-module-decorators/.
+
 ## Documentation
 
 Project developed for the [LIRIS M2i project](https://projet.liris.cnrs.fr/mi2/)

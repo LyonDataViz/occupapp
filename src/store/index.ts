@@ -3,17 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
-    image: 0
-  },
-  mutations: {
-    updateImage (state, selected) {
-      state.image = selected
-    }
-  },
-  actions: {
-  },
-  modules: {
-  }
+const store = new Vuex.Store({
+
 })
+
+export default store

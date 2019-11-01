@@ -40,19 +40,19 @@ import { mapState } from 'vuex'
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Watch } from 'vue-property-decorator'
+import { getModule } from 'vuex-module-decorators'
+import Picture from '@/store/picture.ts'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
+
+const picture = getModule(Picture)
 
 @Component({
   components: {
     Background,
     Handles
-  },
-  // Vuex's component binding helper can use here
-  computed: mapState([
-    'image'
-  ])
+  }
 })
 export default class Home extends Vue {
   // initial data
@@ -79,10 +79,6 @@ export default class Home extends Vue {
     container: HTMLElement
   }
 
-  // additional declaration is needed
-  // when you declare some properties in `Component` decorator
-  image!: number
-
   // lifecycle hook
   mounted () {
     this.devicePixelRatio = window.devicePixelRatio
@@ -107,7 +103,7 @@ export default class Home extends Vue {
     return !this.isResizing
   }
   get imageName () {
-    return this.names[this.image]
+    return this.names[picture.idx]
   }
   get maxImageWidth () {
     return this.imageWidths[this.imageWidths.length - 1]
