@@ -59,7 +59,7 @@ import Pictures from '@/store/pictures.ts'
 const pictures = getModule(Pictures)
 
 @Component
-export default class Handles extends Vue {
+export default class Gallery extends Vue {
   width = 320
 
   get srcs (): string[] {
