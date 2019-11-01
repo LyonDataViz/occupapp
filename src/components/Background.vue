@@ -53,6 +53,8 @@ export default class Handles extends Vue {
     // Redraw & reposition content
     this.ctx.setTransform(this.devicePixelRatio, 0, 0, this.devicePixelRatio, 0, 0)
     this.ctx.clearRect(0, 0, this.width, this.height)
+    // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
+    // TODO confirm above comment
     this.ctx.drawImage(image, 0, 0, this.width, this.height)
 
     if (this.debug) {
