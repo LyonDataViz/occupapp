@@ -6,12 +6,12 @@
       class="flex-columns"
     >
       <v-item
-        v-for="(image,i) in images"
+        v-for="(src,i) in srcs"
         :key="i"
         v-slot:default="{ active, toggle }"
       >
         <v-img
-          :src="image.url"
+          :src="src"
           class="grey lighten-2 text-right pa-2"
           width="100%"
           aspect-ratio="1"
@@ -70,13 +70,8 @@ export default class Handles extends Vue {
     'bazzania'
   ]
 
-  get images (): {name: string, url: string}[] {
-    return this.names.map(name => {
-      return {
-        name: name,
-        url: `https://github.com/severo/pictures/raw/master/images,w_${this.width}/${name}.jpg`
-      }
-    })
+  get srcs (): string[] {
+    return this.names.map(name => `https://github.com/severo/pictures/raw/master/images,w_${this.width}/${name}.jpg`)
   }
   get selected (): number {
     return pictures.selected
