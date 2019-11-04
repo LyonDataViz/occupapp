@@ -61,10 +61,8 @@ const pictures = getModule(Pictures)
 
 @Component
 export default class Gallery extends Vue {
-  width = 320
-
   get srcs (): string[] {
-    return pictures.srcs(this.width)
+    return pictures.thumbnailSrcs
   }
   get selected (): number {
     return pictures.selected
