@@ -96,8 +96,9 @@ export default class Home extends Vue {
     return false
   }
   checkLoop () {
-    // Note: we could check the devicePixelRatio value (dprChanged) at a lower rate if it affects the performance
+    // Beware: this loop is called at every animation frame. Don't overload it
     this.checkSize()
+    // Note: we might check the devicePixelRatio value (checkDpr) at a lower rate if it affects the performance
     this.checkDpr()
     requestAnimationFrame(this.checkLoop)
   }
