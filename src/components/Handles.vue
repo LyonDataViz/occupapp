@@ -88,7 +88,7 @@ export default class Handles extends Vue {
   @Prop({ default: 150 }) readonly height!: number
 
   // local data
-  radius = 8
+  radius = 15
 
   // annotate refs type
   $refs!: {
