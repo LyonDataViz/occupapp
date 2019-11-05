@@ -182,13 +182,14 @@ export default class Handles extends Vue {
   .point
 
     fill: white
-    opacity: 0.8
+    opacity: 0.7
     cursor: pointer
+    stroke: black
     &:hover
-      opacity: 1
+      opacity: 0.9
       filter: url(#elevation2)
     &.dragged
-      opacity: 1
-      stroke: black
+      opacity: 0.9
+      stroke-opacity: 0.5
       filter: url(#elevation20)
 </style>
