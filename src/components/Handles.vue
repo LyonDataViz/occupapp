@@ -5,67 +5,8 @@
     :style="svgStyle"
   >
     <defs>
-      <!-- adapted from https://vuetifyjs.com/en/styles/elevation -->
-      <filter
-        id="elevation2"
-        filterUnits="userSpaceOnUse"
-        height="100"
-        width="100"
-        x="-50"
-        y="-50"
-      >
-        <feDropShadow
-          dx="0"
-          dy="3"
-          stdDeviation="1"
-          flood-color="black"
-          flood-opacity="0.2"
-        />
-        <feDropShadow
-          dx="0"
-          dy="2"
-          stdDeviation="2"
-          flood-color="black"
-          flood-opacity="0.14"
-        />
-        <feDropShadow
-          dx="0"
-          dy="1"
-          stdDeviation="5"
-          flood-color="black"
-          flood-opacity="0.12"
-        />
-      </filter>
-      <filter
-        id="elevation20"
-        filterUnits="userSpaceOnUse"
-        height="200"
-        width="200"
-        x="-100"
-        y="-100"
-      >
-        <feDropShadow
-          dx="0"
-          dy="10"
-          stdDeviation="13"
-          flood-color="black"
-          flood-opacity="0.2"
-        />
-        <feDropShadow
-          dx="0"
-          dy="20"
-          stdDeviation="31"
-          flood-color="black"
-          flood-opacity="0.14"
-        />
-        <feDropShadow
-          dx="0"
-          dy="8"
-          stdDeviation="38"
-          flood-color="black"
-          flood-opacity="0.12"
-        />
-      </filter>
+      <FilterShadow2 />
+      <FilterShadow8 />
     </defs>
   </svg>
 </template>
@@ -76,12 +17,20 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import * as d3 from 'd3'
 
+import FilterShadow2 from '@/components/FilterShadow2.vue'
+import FilterShadow8 from '@/components/FilterShadow8.vue'
+
 interface Point {
     x: number;
     y: number;
 }
 
-@Component
+@Component({
+  components: {
+    FilterShadow2,
+    FilterShadow8
+  }
+})
 export default class Handles extends Vue {
   // props
   @Prop({ default: 300 }) readonly width!: number
@@ -191,5 +140,5 @@ export default class Handles extends Vue {
     &.dragged
       opacity: 0.9
       stroke-opacity: 0.5
-      filter: url(#elevation20)
+      filter: url(#elevation8)
 </style>
