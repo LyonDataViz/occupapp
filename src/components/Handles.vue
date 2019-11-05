@@ -3,7 +3,71 @@
     ref="svg"
     :viewBox="viewbox"
     :style="svgStyle"
-  />
+  >
+    <defs>
+      <!-- adapted from https://vuetifyjs.com/en/styles/elevation -->
+      <filter
+        id="elevation2"
+        filterUnits="userSpaceOnUse"
+        height="100"
+        width="100"
+        x="-50"
+        y="-50"
+      >
+        <feDropShadow
+          dx="0"
+          dy="3"
+          stdDeviation="1"
+          flood-color="black"
+          flood-opacity="0.2"
+        />
+        <feDropShadow
+          dx="0"
+          dy="2"
+          stdDeviation="2"
+          flood-color="black"
+          flood-opacity="0.14"
+        />
+        <feDropShadow
+          dx="0"
+          dy="1"
+          stdDeviation="5"
+          flood-color="black"
+          flood-opacity="0.12"
+        />
+      </filter>
+      <filter
+        id="elevation20"
+        filterUnits="userSpaceOnUse"
+        height="200"
+        width="200"
+        x="-100"
+        y="-100"
+      >
+        <feDropShadow
+          dx="0"
+          dy="10"
+          stdDeviation="13"
+          flood-color="black"
+          flood-opacity="0.2"
+        />
+        <feDropShadow
+          dx="0"
+          dy="20"
+          stdDeviation="31"
+          flood-color="black"
+          flood-opacity="0.14"
+        />
+        <feDropShadow
+          dx="0"
+          dy="8"
+          stdDeviation="38"
+          flood-color="black"
+          flood-opacity="0.12"
+        />
+      </filter>
+    </defs>
+  </svg>
 </template>
 
 <script lang="ts">
@@ -74,15 +138,15 @@ export default class Handles extends Vue {
       .type(d3.symbolCircle)
       .size(this.symbolSize)
 
+    // See https://stackoverflow.com/a/44523718/7351594
     const point = this.svg
-      .selectAll('path')
+      .selectAll('g')
       .data([{ x, y }])
       .join(
         function (enter) {
-          return enter
-            .append('path')
+          const g = enter
+            .append('g')
             .attr('transform', `translate(${x}, ${y})`)
-            .attr('d', symbol)
             .classed('point', true)
             .on('mouseover', function () {
               d3.select(this)
@@ -90,7 +154,7 @@ export default class Handles extends Vue {
             })
             .call(
               d3
-                .drag<SVGPathElement, Point>()
+                .drag<SVGGElement, Point>()
                 .on('start', function (d: Point) {
                   d3.select(this).classed('dragged', true)
                 })
@@ -101,6 +165,10 @@ export default class Handles extends Vue {
                   d3.select(this).classed('dragged', false)
                 })
             )
+          g
+            .append('path')
+            .attr('d', symbol)
+          return g
         }
       )
   }
@@ -112,11 +180,15 @@ export default class Handles extends Vue {
 
 <style lang="sass">
   .point
+
     fill: white
     opacity: 0.8
     cursor: pointer
     &:hover
       opacity: 1
+      filter: url(#elevation2)
     &.dragged
-      fill: steelblue
+      opacity: 1
+      stroke: black
+      filter: url(#elevation20)
 </style>
