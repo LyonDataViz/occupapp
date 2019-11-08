@@ -73,14 +73,17 @@ export default class Handles extends Vue {
   get pictureId (): number {
     return compositions.currentPictureId
   }
-  get pictureName (): string {
-    return (this.pictureId in pictures.names) ? pictures.names[this.pictureId] : 'unknown'
-  }
+  // TODO check if there is a best practice for use of 'private' keyword,a nd if we follow it
   private get isPlaceholderVisible (): boolean {
     return this.isImageLoading || this.isCanvasRendering
   }
   private get isCanvasVisible (): boolean {
     return !this.isPlaceholderVisible
+  }
+
+  // lifecycle hook
+  mounted () {
+    this.fetchImage(this.pictureId)
   }
 
   // methods
@@ -94,7 +97,7 @@ export default class Handles extends Vue {
     this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
 
     if (this.debug) {
-      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + this.pictureName
+      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + pictures.getName(this.pictureId)
       this.ctx.textAlign = 'center'
       this.ctx.fillStyle = '#000'
       this.ctx.fillText(resizeText, this.width / 2, this.height / 2)

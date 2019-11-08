@@ -63,22 +63,16 @@ const compositions = getModule(Compositions)
 @Component
 export default class Gallery extends Vue {
   get srcs (): string[] {
+    // TODO improve safety of picture identification. Currently it only depends on the idx in pictures.thumbnailSrcs array
     return pictures.thumbnailSrcs
   }
   get selected (): number {
     return compositions.currentPictureId
   }
   set selected (pictureId: number) {
-    // TODO maybe notify the user that the image is being selected
-    // TODO manage this logic inside the Composition module
-    if (compositions.defaultByPictureId(pictureId) === undefined) {
-      compositions.addByPictureId(pictureId).then(c =>
-        compositions.selectDefaultByPictureId(pictureId)
-      )
-    } else {
-      compositions.selectDefaultByPictureId(pictureId)
-    }
-    // TODO maybe remove the notification
+    // VERY BAD - it works only because compositions id is currently set to the same value as pictureId
+    compositions.setCurrent(pictureId)
+    // compositions.setCurrentByPictureId(pictureId)
   }
 }
 </script>

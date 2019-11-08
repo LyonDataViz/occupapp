@@ -58,19 +58,13 @@ export default class Home extends Vue {
 
   // lifecycle hook
   mounted () {
-    // Select the first image
-    compositions.selectDefaultByPictureId(0)
-
-    // Load the default selected image
     this.checkLoop()
   }
 
   // computed
   get aspectRatio () {
-    return compositions.current !== undefined &&
-      compositions.current.pictureHeight > 0
-      ? compositions.current.pictureWidth / compositions.current.pictureHeight
-      : 1
+    // TODO utiliser mapGetters?
+    return compositions.currentAspectRatio
   }
   get container (): HTMLElement {
     return this.$refs.container

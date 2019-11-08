@@ -22,7 +22,7 @@ import FilterShadow2 from '@/components/FilterShadow2.vue'
 import FilterShadow8 from '@/components/FilterShadow8.vue'
 
 import * as pictures from '@/utils/pictures.ts'
-import Compositions, { Status, Point } from '@/store/compositions.ts'
+import Compositions, { Point, Composition } from '@/store/compositions.ts'
 
 const compositions = getModule(Compositions)
 
@@ -39,7 +39,6 @@ export default class Handles extends Vue {
 
   // local data
   radius = 15
-  points: Point[] = []
 
   // annotate refs type
   $refs!: {
@@ -74,17 +73,36 @@ export default class Handles extends Vue {
   get symbolSize (): number {
     return this.radius * this.radius * 4
   }
-  get isSelectedImageReady (): boolean {
-    return compositions.current !== undefined && compositions.current.status === Status.READY
+  get current (): Composition {
+    return compositions.current
+  }
+  get points (): Point[] {
+    return this.current.points
+  }
+  set points (points: Point[]) {
+    // TODO expose other setters for partial updates (points[i].x = 12.34, for example)
+    compositions.setCurrentPoints(points)
+  }
+
+  // lifecycle hook
+  mounted () {
+    this.createPoints()
   }
 
   // methods
+  removePoints (): void {
+    const point = this.svg
+      .selectAll('g.point')
+      .remove()
+  }
+
   createPoints (): void {
     const symbol = d3
       .symbol()
       .type(d3.symbolCircle)
       .size(this.symbolSize)
 
+    // TODO replace join/enter by enter(), if we will not use d3 to manage the state?
     const point = this.svg
       .selectAll('g')
       .data(this.points)
@@ -125,27 +143,26 @@ export default class Handles extends Vue {
         return g
       })
   }
-  random10to90 (): number {
-    return Math.random() * 80 + 10
-  }
+  // random10to90 (): number {
+  //   return Math.random() * 80 + 10
+  // }
 
-  @Watch('isSelectedImageReady')
-  onSelectedImageReady (val: boolean, oldVal: boolean) {
-    if (val && !oldVal) {
-      // We should modify directly in the store (commits) when a point is dragged
-      this.points = compositions.current === undefined
-        ? d3.range(5).map(i => ({
-          x: this.random10to90(),
-          y: this.random10to90()
-        })) : compositions.current.points
+  @Watch('current')
+  onCompositionChange (val: Composition, oldVal: Composition) {
+    // // TODO: ensure the points are committed to the store (compositions) now, or when a point is dragged
+    // this.points = d3.range(5).map(i => ({
+    //   x: this.random10to90(),
+    //   y: this.random10to90()
+    // }))
 
-      this.createPoints()
-    }
+    this.removePoints()
+    this.createPoints()
   }
 
   @Watch('width')
   @Watch('height')
   onResize (val: number, oldVal: number) {
+    // this.x and this.y (scales) should have been modified
     this.svg
       .selectAll('.point')
       .attr('transform', (d: any, i:number) => {
