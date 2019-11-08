@@ -61,21 +61,10 @@ export default class Compositions extends VuexModule {
     }
   }
 
-  get getByPictureId () {
-    return (pictureId: number): Composition => {
-      const c = this.all.find(c => c.pictureId === pictureId)
-      if (c === undefined) {
-        throw new Error(`No composition in "all" for pictureId ${pictureId}. There should be exactly one.`)
-      } else {
-        return c
-      }
-    }
-  }
-
   get current (): Composition {
-    // if (!(this.currentId in this.all)) {
-    //   throw new Error(`No composition in "all" for currentId ${this.currentId}`)
-    // }
+    if (!(this.currentId in this.all)) {
+      throw new Error(`No composition in "all" for currentId ${this.currentId}`)
+    }
     return this.all[this.currentId]
   }
 
@@ -91,13 +80,6 @@ export default class Compositions extends VuexModule {
   }
 
   // Mutations (synchronous)
-  // TODO remove dead code, or adapt, if we want to manage various compositions per picture
-  // @Mutation
-  // add (c: Composition) {
-  //   // brittle way to fill the id - how could we improve it?
-  //   c.id = this.all.push(c) - 1
-  //   return c
-  // }
   @Mutation
   setCurrent (id: number) {
     if (!(id in this.all)) {
@@ -105,33 +87,15 @@ export default class Compositions extends VuexModule {
     }
     this.currentId = id
   }
-  // TODO hack! idk why, but commented code throws TypeError: this.getByPictureId is not a function
-  // Use an action?
-  // @Mutation
-  // setCurrentByPictureId (pictureId: number) {
-  //   // const c = this.getByPictureId(pictureId)
-  //   // this.setCurrent(c.id)
-  //
-  //   this.setCurrent(pictureId)
-  // }
+  @Mutation
+  setCurrentByPictureId (pictureId: number) {
+    if (!(pictureId in this.all)) {
+      throw new Error(`No composition in "all" for pictureId ${pictureId}. There should be exactly one.`)
+    }
+    store.commit('setCurrent', this.all[pictureId].id)
+  }
   @Mutation
   setCurrentPoints (points: Point[]) {
     this.current.points = points
   }
-
-  // Actions (asynchronous)
-  // TODO remove dead code, or adapt, if we want to manage various compositions per picture
-  // @Action
-  // async addByPictureId (pictureId: number) {
-  //   // Get the image size
-  //   const { width, height } = await fetchMaxSize(pictureId)
-  //   const c: Composition = {
-  //     id: -1,
-  //     pictureId: pictureId,
-  //     pictureWidth: width,
-  //     pictureHeight: height,
-  //     points: []
-  //   }
-  //   return this.add(c)
-  // }
 }

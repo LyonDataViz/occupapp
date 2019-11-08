@@ -70,9 +70,7 @@ export default class Gallery extends Vue {
     return compositions.currentPictureId
   }
   set selected (pictureId: number) {
-    // VERY BAD - it works only because compositions id is currently set to the same value as pictureId
-    compositions.setCurrent(pictureId)
-    // compositions.setCurrentByPictureId(pictureId)
+    compositions.setCurrentByPictureId(pictureId)
   }
 }
 </script>
