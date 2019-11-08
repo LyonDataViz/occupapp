@@ -24,9 +24,10 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
 
-import Pictures from '@/store/pictures.ts'
+import * as pictures from '@/utils/pictures.ts'
+import Compositions from '@/store/compositions.ts'
 
-const pictures = getModule(Pictures)
+const compositions = getModule(Compositions)
 
 @Component
 export default class Handles extends Vue {
@@ -67,10 +68,13 @@ export default class Handles extends Vue {
     }
   }
   get wrapperStyle (): {width: string, height: string} {
-    return this.canvasStyle
+    return { ...this.canvasStyle }
   }
-  get selected (): number {
-    return pictures.selected
+  get pictureId (): number {
+    return compositions.currentPictureId
+  }
+  get pictureName (): string {
+    return (this.pictureId in pictures.names) ? pictures.names[this.pictureId] : 'unknown'
   }
   private get isPlaceholderVisible (): boolean {
     return this.isImageLoading || this.isCanvasRendering
@@ -79,13 +83,8 @@ export default class Handles extends Vue {
     return !this.isPlaceholderVisible
   }
 
-  // lifecycle hooks
-  mounted () {
-    this.createImage()
-  }
-
   // methods
-  drawCanvas (imageName: string): void {
+  drawCanvas (): void {
     if (this.ctx === null) { return }
     // Redraw & reposition content
     this.ctx.setTransform(this.devicePixelRatio, 0, 0, this.devicePixelRatio, 0, 0)
@@ -95,34 +94,30 @@ export default class Handles extends Vue {
     this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
 
     if (this.debug) {
-      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + imageName
+      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + this.pictureName
       this.ctx.textAlign = 'center'
       this.ctx.fillStyle = '#000'
       this.ctx.fillText(resizeText, this.width / 2, this.height / 2)
     }
   }
 
-  createImage () {
+  async fetchImage (pictureId: number) {
     this.isImageLoading = true
-    const img = new Image()
-    img.onload = () => {
-      this.image = img
-      this.isImageLoading = false
-    }
-    img.src = pictures.selectedSrcAtWidth(pictures.maxWidth)
-    img.srcset = pictures.widths.map(w => `${pictures.selectedSrcAtWidth(w)} ${w}w`).join(',')
+    this.image = await pictures.fetchImage(pictureId)
+    this.isImageLoading = false
   }
 
   // watchers
-  @Watch('selected')
-  onSelectedImageChange (val: string, oldVal: string) {
-    this.createImage()
+  @Watch('pictureId')
+  onPictureIdChange (pictureId: number, oldPictureId: number) {
+    this.fetchImage(pictureId)
   }
+
   @Watch('image')
   @Watch('width')
   @Watch('height')
   @Watch('devicePixelRatio')
-  onSomethingChange (val: string, oldVal: string) {
+  onSomethingChange (val: number | HTMLImageElement, oldVal: number | HTMLImageElement) {
     // See https://stackoverflow.com/a/37588776/7351594
     this.isCanvasRendering = true
     clearTimeout(this.debounceTimer)
@@ -134,7 +129,7 @@ export default class Handles extends Vue {
         // Always change the size before rendering (because size change cleans the canvas)
         this.canvas.width = this.canvasWidth
         this.canvas.height = this.canvasHeight
-        this.drawCanvas(pictures.selectedName)
+        this.drawCanvas()
         this.isCanvasRendering = false
       }
     }, 150)

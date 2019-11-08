@@ -55,9 +55,10 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 
-import Pictures from '@/store/pictures.ts'
+import Compositions from '@/store/compositions.ts'
+import * as pictures from '@/utils/pictures.ts'
 
-const pictures = getModule(Pictures)
+const compositions = getModule(Compositions)
 
 @Component
 export default class Gallery extends Vue {
@@ -65,10 +66,19 @@ export default class Gallery extends Vue {
     return pictures.thumbnailSrcs
   }
   get selected (): number {
-    return pictures.selected
+    return compositions.currentPictureId
   }
-  set selected (value: number) {
-    pictures.select(value)
+  set selected (pictureId: number) {
+    // TODO maybe notify the user that the image is being selected
+    // TODO manage this logic inside the Composition module
+    if (compositions.defaultByPictureId(pictureId) === undefined) {
+      compositions.addByPictureId(pictureId).then(c =>
+        compositions.selectDefaultByPictureId(pictureId)
+      )
+    } else {
+      compositions.selectDefaultByPictureId(pictureId)
+    }
+    // TODO maybe remove the notification
   }
 }
 </script>

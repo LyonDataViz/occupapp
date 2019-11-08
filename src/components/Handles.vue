@@ -14,15 +14,21 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { getModule } from 'vuex-module-decorators'
 import * as d3 from 'd3'
 
 import FilterShadow2 from '@/components/FilterShadow2.vue'
 import FilterShadow8 from '@/components/FilterShadow8.vue'
 
+import * as pictures from '@/utils/pictures.ts'
+import Compositions, { Status } from '@/store/compositions.ts'
+
+const compositions = getModule(Compositions)
+
 interface Point {
-    x: number;
-    y: number;
+  x: number
+  y: number
 }
 
 @Component({
@@ -38,6 +44,7 @@ export default class Handles extends Vue {
 
   // local data
   radius = 15
+  points: Point[] = []
 
   // annotate refs type
   $refs!: {
@@ -72,73 +79,96 @@ export default class Handles extends Vue {
   get symbolSize (): number {
     return this.radius * this.radius * 4
   }
-
-  // lifecycle hooks
-  mounted () {
-    this.addRandomPoint()
+  get isSelectedImageReady (): boolean {
+    return compositions.current !== undefined && compositions.current.status === Status.READY
   }
 
   // methods
-  addRandomPoint (): void {
-    const x = this.x(this.random10to90())
-    const y = this.y(this.random10to90())
+  createPoints (): void {
     const symbol = d3
       .symbol()
       .type(d3.symbolCircle)
       .size(this.symbolSize)
 
-    // See https://stackoverflow.com/a/44523718/7351594
     const point = this.svg
       .selectAll('g')
-      .data([{ x, y }])
-      .join(
-        function (enter) {
-          const g = enter
-            .append('g')
-            .attr('transform', `translate(${x}, ${y})`)
-            .classed('point', true)
-            .on('mouseover', function () {
-              d3.select(this)
-                .raise()
-            })
-            .call(
-              d3
-                .drag<SVGGElement, Point>()
-                .on('start', function (d: Point) {
-                  d3.select(this).classed('dragged', true)
-                })
-                .on('drag', function (d: Point) {
-                  d3.select(this).attr('transform', function (d: any) : string { return `translate(${(d.x += d3.event.dx)}, ${(d.y += d3.event.dy)})` })
-                })
-                .on('end', function (d: Point) {
-                  d3.select(this).classed('dragged', false)
-                })
-            )
-          g
-            .append('path')
-            .attr('d', symbol)
-          return g
-        }
-      )
+      .data(this.points)
+      .join(enter => {
+        const g = enter
+          .append('g')
+          .attr('transform', (d: Point, i:number) => {
+            const p = this.points[i]
+            return `translate(${this.x(p.x)}, ${this.y(p.y)})`
+          })
+          .classed('point', true)
+          .on('mouseover', function () {
+            d3.select(this).raise()
+          }).call(
+            // For an explanation on ".drag<SVGGElement, Point>()":
+            // see https://stackoverflow.com/a/44523718/7351594
+            d3
+              .drag<SVGGElement, Point>()
+              .on('start', (d: Point, i: number, nodes) => {
+                d3.select(nodes[i]).classed('dragged', true)
+              })
+              .on('drag', (d: Point, i: number, nodes) => {
+                const position = d3.mouse(this.$refs.svg)
+                // Note: this.points (Vue component local store) is the state of truth
+                // we don't let d3 manage the data
+                const p = this.points[i]
+                p.x = this.x.invert(position[0])
+                p.y = this.y.invert(position[1])
+                d3.select(nodes[i]).attr('transform', `translate(${this.x(p.x)}, ${this.y(p.y)})`)
+              })
+              .on('end', (d: Point, i: number, nodes) => {
+                d3.select(nodes[i]).classed('dragged', false)
+              })
+          )
+        g.append('path')
+          .classed('symbol', true)
+          .attr('d', symbol)
+        return g
+      })
   }
   random10to90 (): number {
     return Math.random() * 80 + 10
+  }
+
+  @Watch('isSelectedImageReady')
+  onSelectedImageReady (val: boolean, oldVal: boolean) {
+    if (val && !oldVal) {
+      this.points = d3.range(5).map(i => ({
+        x: this.random10to90(),
+        y: this.random10to90()
+      }))
+      this.createPoints()
+    }
+  }
+
+  @Watch('width')
+  @Watch('height')
+  onResize (val: number, oldVal: number) {
+    this.svg
+      .selectAll('.point')
+      .attr('transform', (d: any, i:number) => {
+        const p = this.points[i]
+        return `translate(${this.x(p.x)}, ${this.y(p.y)})`
+      })
   }
 }
 </script>
 
 <style lang="sass">
-  .point
-
-    fill: white
-    opacity: 0.7
-    cursor: pointer
-    stroke: black
-    &:hover
-      opacity: 0.9
-      filter: url(#elevation2)
-    &.dragged
-      opacity: 0.9
-      stroke-opacity: 0.5
-      filter: url(#elevation8)
+.point
+  fill: white
+  opacity: 0.7
+  cursor: pointer
+  stroke: black
+  &:hover
+    opacity: 0.9
+    filter: url(#elevation2)
+  &.dragged
+    opacity: 0.9
+    stroke-opacity: 0.5
+    filter: url(#elevation8)
 </style>

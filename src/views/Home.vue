@@ -32,12 +32,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 
-import Pictures from '@/store/pictures.ts'
+import Compositions from '@/store/compositions.ts'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
 
-const pictures = getModule(Pictures)
+const compositions = getModule(Compositions)
 
 @Component({
   components: {
@@ -58,14 +58,22 @@ export default class Home extends Vue {
 
   // lifecycle hook
   mounted () {
+    // TODO remove, and set a static composition, or manage this logic inside the Composition module
+    const pictureId = 0
+    compositions.addByPictureId(pictureId).then(c =>
+      compositions.selectDefaultByPictureId(pictureId)
+    )
+
     // Load the default selected image
-    pictures.select(pictures.selected)
     this.checkLoop()
   }
 
   // computed
   get aspectRatio () {
-    return pictures.selectedAspectRatio
+    return compositions.current !== undefined &&
+      compositions.current.pictureHeight > 0
+      ? compositions.current.pictureWidth / compositions.current.pictureHeight
+      : 1
   }
   get container (): HTMLElement {
     return this.$refs.container
@@ -106,13 +114,13 @@ export default class Home extends Vue {
 </script>
 
 <style lang="sass">
-  div#image-wrapper
-    position: relative
-    .below
-      display: block
-    .above
-      position: absolute
-      top: 0
-      left: 0
-      z-index: 2
+div#image-wrapper
+  position: relative
+  .below
+    display: block
+  .above
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 2
 </style>
