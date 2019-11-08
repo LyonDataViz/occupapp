@@ -22,14 +22,9 @@ import FilterShadow2 from '@/components/FilterShadow2.vue'
 import FilterShadow8 from '@/components/FilterShadow8.vue'
 
 import * as pictures from '@/utils/pictures.ts'
-import Compositions, { Status } from '@/store/compositions.ts'
+import Compositions, { Status, Point } from '@/store/compositions.ts'
 
 const compositions = getModule(Compositions)
-
-interface Point {
-  x: number
-  y: number
-}
 
 @Component({
   components: {
@@ -137,10 +132,13 @@ export default class Handles extends Vue {
   @Watch('isSelectedImageReady')
   onSelectedImageReady (val: boolean, oldVal: boolean) {
     if (val && !oldVal) {
-      this.points = d3.range(5).map(i => ({
-        x: this.random10to90(),
-        y: this.random10to90()
-      }))
+      // We should modify directly in the store (commits) when a point is dragged
+      this.points = compositions.current === undefined
+        ? d3.range(5).map(i => ({
+          x: this.random10to90(),
+          y: this.random10to90()
+        })) : compositions.current.points
+
       this.createPoints()
     }
   }

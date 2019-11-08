@@ -58,11 +58,8 @@ export default class Home extends Vue {
 
   // lifecycle hook
   mounted () {
-    // TODO remove, and set a static composition, or manage this logic inside the Composition module
-    const pictureId = 0
-    compositions.addByPictureId(pictureId).then(c =>
-      compositions.selectDefaultByPictureId(pictureId)
-    )
+    // Select the first image
+    compositions.selectDefaultByPictureId(0)
 
     // Load the default selected image
     this.checkLoop()

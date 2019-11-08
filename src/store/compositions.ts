@@ -8,19 +8,40 @@ export enum Status {
   LOADING, READY, ERROR
 }
 
+export interface Point {
+  x: number
+  y: number
+}
+
 interface Composition {
     id: number;
     pictureId: number;
     pictureWidth: number;
     pictureHeight: number;
-    pointIds: number[];
+    points: Point[];
     status: Status;
 }
 
 @Module({ dynamic: true, store, name: 'compositions' })
 export default class Compositions extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
-  all: Composition[] = []
+  all: Composition[] = [
+    { id: 0,
+      pictureId: 0, // 'petanque',
+      pictureWidth: 2620,
+      pictureHeight: 1745,
+      points: [
+        { x: 50.1, y: 60.5 },
+        { x: 36.5, y: 87.4 },
+        { x: 17.9, y: 73.0 },
+        { x: 28.2, y: 36.6 },
+        { x: 49.9, y: 36.5 },
+        { x: 76.2, y: 27.9 },
+        { x: 87.9, y: 35.9 }
+      ],
+      status: Status.READY
+    }
+  ]
   // TODO? add currentByPictureId, keeping the track of the last used composition?
   currentId: number = -1
 
@@ -74,7 +95,7 @@ export default class Compositions extends VuexModule {
       pictureId: pictureId,
       pictureWidth: width,
       pictureHeight: height,
-      pointIds: [],
+      points: [],
       status: Status.LOADING
     }
     return this.add(c)
