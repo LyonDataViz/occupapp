@@ -23,9 +23,11 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
+import { Delaunay } from 'd3-delaunay'
+import * as d3 from 'd3'
 
 import * as pictures from '@/utils/pictures.ts'
-import Compositions from '@/store/compositions.ts'
+import Compositions, { Point } from '@/store/compositions.ts'
 
 const compositions = getModule(Compositions)
 
@@ -73,12 +75,34 @@ export default class Handles extends Vue {
   get pictureId (): number {
     return compositions.currentPictureId
   }
+  get points (): Point[] {
+    return compositions.current.points
+  }
   // TODO check if there is a best practice for use of 'private' keyword,a nd if we follow it
   private get isPlaceholderVisible (): boolean {
-    return this.isImageLoading || this.isCanvasRendering
+    return this.isImageLoading
   }
   private get isCanvasVisible (): boolean {
     return !this.isPlaceholderVisible
+  }
+  get x () {
+    return d3
+      .scaleLinear()
+      .domain([0, 100])
+      .range([0, this.width])
+  }
+  get y () {
+    return d3
+      .scaleLinear()
+      .domain([0, 100])
+      .range([0, this.height])
+  }
+  get voronoi () {
+    return Delaunay.from(
+      this.points,
+      (d: Point): number => this.x(d.x),
+      (d: Point): number => this.y(d.y)
+    ).voronoi([0, 0, this.canvasWidth, this.canvasHeight])
   }
 
   // lifecycle hook
@@ -95,13 +119,32 @@ export default class Handles extends Vue {
     // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
     // TODO confirm above comment
     this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
-
+    this.drawVoronoi(this.ctx)
     if (this.debug) {
       const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + pictures.getName(this.pictureId)
       this.ctx.textAlign = 'center'
       this.ctx.fillStyle = '#000'
       this.ctx.fillText(resizeText, this.width / 2, this.height / 2)
     }
+  }
+
+  drawVoronoi (context: CanvasRenderingContext2D): void {
+    context.save()
+    const v = this.voronoi
+    let i = 0
+    for (const d of this.points) {
+      context.beginPath()
+      v.renderCell(i++, context)
+      context.globalAlpha = 0.4
+      context.fillStyle = 'white'
+      context.fill()
+
+      context.globalAlpha = 1
+      context.lineWidth = 1
+      context.strokeStyle = '#fff'
+      context.stroke()
+    }
+    context.restore()
   }
 
   async fetchImage (pictureId: number) {
@@ -120,6 +163,7 @@ export default class Handles extends Vue {
   @Watch('width')
   @Watch('height')
   @Watch('devicePixelRatio')
+  @Watch('points', { deep: true })
   onSomethingChange (val: number | HTMLImageElement, oldVal: number | HTMLImageElement) {
     // See https://stackoverflow.com/a/37588776/7351594
     this.isCanvasRendering = true
@@ -135,7 +179,7 @@ export default class Handles extends Vue {
         this.drawCanvas()
         this.isCanvasRendering = false
       }
-    }, 150)
+    }, 10)
   }
 }
 </script>
