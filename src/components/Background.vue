@@ -104,7 +104,13 @@ export default class Handles extends Vue {
       (d: Point): number => this.y(d.y)
     ).voronoi([0, 0, this.canvasWidth, this.canvasHeight])
   }
+  get color () {
+    const colors =
+      [d3.rgb(255, 195, 8), d3.rgb(172, 159, 253), d3.rgb(181, 246, 66), d3.rgb(239, 106, 222)]
 
+    // Note .hex() will be obsolete in d3-color, see https://github.com/d3/d3-color#color_formatHex and https://www.npmjs.com/package/@types/d3
+    return (i: number): string => colors[i % 4].hex()
+  }
   // lifecycle hook
   mounted () {
     this.fetchImage(this.pictureId)
@@ -135,8 +141,8 @@ export default class Handles extends Vue {
     for (const d of this.points) {
       context.beginPath()
       v.renderCell(i++, context)
-      context.globalAlpha = 0.4
-      context.fillStyle = 'white'
+      context.globalAlpha = 0.2
+      context.fillStyle = this.color(i)
       context.fill()
 
       context.globalAlpha = 1
