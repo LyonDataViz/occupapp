@@ -80,7 +80,6 @@ export default class Handles extends Vue {
     return this.current.points
   }
   set points (points: Point[]) {
-    // TODO expose other setters for partial updates (points[i].x = 12.34, for example)
     compositions.setCurrentPoints(points)
   }
 
