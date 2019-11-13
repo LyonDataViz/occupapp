@@ -113,9 +113,10 @@ export default class Handles extends Vue {
             return `translate(${this.x(p.x)}, ${this.y(p.y)})`
           })
           .classed('point', true)
-          .on('mouseover', function () {
-            d3.select(this).raise()
-          }).call(
+          // .on('mouseover', function () {
+          //   d3.select(this).raise()
+          // })
+          .call(
             // For an explanation on ".drag<SVGGElement, Point>()":
             // see https://stackoverflow.com/a/44523718/7351594
             d3
