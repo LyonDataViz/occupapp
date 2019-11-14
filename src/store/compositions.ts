@@ -38,7 +38,31 @@ export default class Compositions extends VuexModule {
       ]
     },
     { id: 1,
-      pictureId: 1, // 'bazzania'
+      pictureId: 1, // 'boats'
+      pictureWidth: 3992,
+      pictureHeight: 2992,
+      points: []
+    },
+    { id: 2,
+      pictureId: 2, // 'honeycomb'
+      pictureWidth: 2901,
+      pictureHeight: 2176,
+      points: []
+    },
+    { id: 3,
+      pictureId: 3, // 'spider'
+      pictureWidth: 1925,
+      pictureHeight: 1444,
+      points: []
+    },
+    { id: 4,
+      pictureId: 4, // 'wolves'
+      pictureWidth: 2208,
+      pictureHeight: 1500,
+      points: []
+    },
+    { id: 5,
+      pictureId: 5, // 'bazzania'
       pictureWidth: 1936,
       pictureHeight: 1288,
       points: [
@@ -47,6 +71,16 @@ export default class Compositions extends VuexModule {
         { x: 40, y: 50, selected: false },
         { x: 60, y: 50, selected: false }
       ]
+    }, { id: 6,
+      pictureId: 6, // 'basketball'
+      pictureWidth: 2362,
+      pictureHeight: 1533,
+      points: []
+    }, { id: 7,
+      pictureId: 7, // 'beach'
+      pictureWidth: 3511,
+      pictureHeight: 1975,
+      points: []
     }
   ]
   currentId: number = 0

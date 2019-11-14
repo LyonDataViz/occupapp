@@ -30,11 +30,13 @@ async function fetchImage (pictureId: number): Promise<HTMLImageElement> {
 
 const names: string[] = [
   'petanque',
-  // 'boats',
-  // 'honeycomb',
-  // 'spider',
-  // 'wolves',
-  'bazzania'
+  'boats',
+  'honeycomb',
+  'spider',
+  'wolves',
+  'bazzania',
+  'basketball',
+  'beach'
 ]
 const widths: number[] = [320, 640, 768, 1024, 1366, 1600, 1920]
 const sortedWidth: number[] = [...widths].sort((a: number, b: number): number => a - b)
