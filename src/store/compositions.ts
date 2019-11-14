@@ -5,6 +5,7 @@ import store from '@/store'
 export interface Point {
   x: number
   y: number
+  selected: boolean
 }
 
 export interface Composition {
@@ -27,13 +28,13 @@ export default class Compositions extends VuexModule {
       pictureWidth: 2620,
       pictureHeight: 1745,
       points: [
-        { x: 50.1, y: 60.5 },
-        { x: 36.5, y: 87.4 },
-        { x: 17.9, y: 73.0 },
-        { x: 28.2, y: 36.6 },
-        { x: 49.9, y: 36.5 },
-        { x: 76.2, y: 27.9 },
-        { x: 87.9, y: 35.9 }
+        { x: 50.1, y: 60.5, selected: false },
+        { x: 36.5, y: 87.4, selected: false },
+        { x: 17.9, y: 73.0, selected: false },
+        { x: 28.2, y: 36.6, selected: false },
+        { x: 49.9, y: 36.5, selected: false },
+        { x: 76.2, y: 27.9, selected: false },
+        { x: 87.9, y: 35.9, selected: false }
       ]
     },
     { id: 1,
@@ -41,10 +42,10 @@ export default class Compositions extends VuexModule {
       pictureWidth: 1936,
       pictureHeight: 1288,
       points: [
-        { x: 50, y: 40 },
-        { x: 50, y: 60 },
-        { x: 40, y: 50 },
-        { x: 60, y: 50 }
+        { x: 50, y: 40, selected: false },
+        { x: 50, y: 60, selected: false },
+        { x: 40, y: 50, selected: false },
+        { x: 60, y: 50, selected: false }
       ]
     }
   ]
@@ -96,6 +97,10 @@ export default class Compositions extends VuexModule {
   }
   @Mutation
   setCurrentPoints (points: Point[]) {
-    this.current.points = points
+    this.all[this.currentId].points = points
+  }
+  @Mutation
+  deleteSelectedPoints () {
+    store.commit('setCurrentPoints', this.all[this.currentId].points.filter(p => !p.selected))
   }
 }

@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^4.5.95",
+    "@mdi/js": "^4.5.95",
     "@types/chai": "^4.2.4",
     "@types/d3": "^5.7.2",
     "@types/d3-delaunay": "^4.1.0",

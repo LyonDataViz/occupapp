@@ -14,6 +14,7 @@
         v-bind.sync="point"
         :width="width"
         :height="height"
+        :selecting="selecting"
       />
     </g>
   </svg>
@@ -69,6 +70,9 @@ export default class Handles extends Vue {
   }
   set points (points: Point[]) {
     compositions.setCurrentPoints(points)
+  }
+  get selecting (): boolean {
+    return this.points.some(p => p.selected === true)
   }
 
   // lifecycle hook

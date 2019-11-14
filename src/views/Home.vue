@@ -10,6 +10,32 @@
       justify="center"
     >
       <div id="image-wrapper">
+        <v-banner
+          class="floating"
+          single-line
+          elevation="8"
+          transition="slide-y-transition"
+          v-show="showBanner"
+        >
+          {{ selectedPointsText }}
+          <template v-slot:actions>
+            <v-btn
+              text
+              color="secondary"
+              @click="cancelSelection"
+            >
+              Dismiss
+            </v-btn>
+            <v-btn
+              text
+              color="error"
+              @click="deleteSelection"
+            >
+              Delete
+            </v-btn>
+          </template>
+        </v-banner>
+
         <Background
           ref="background"
           class="below"
@@ -32,7 +58,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 
-import Compositions from '@/store/compositions.ts'
+import Compositions, { Point, Composition } from '@/store/compositions.ts'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
@@ -101,6 +127,32 @@ export default class Home extends Vue {
     this.checkDpr()
     requestAnimationFrame(this.checkLoop)
   }
+
+  get points (): Point[] {
+    return compositions.current.points
+  }
+  set points (points: Point[]) {
+    compositions.setCurrentPoints(points)
+  }
+  get selectedPoints (): Point[] {
+    return this.points.filter(p => p.selected === true)
+  }
+  get selectedPointsText (): string {
+    return `${this.selectedPoints.length} ${this.selectedPoints.length === 1 ? 'point' : 'points'}`
+  }
+  get showBanner (): boolean {
+    return this.selectedPoints.length > 0
+  }
+
+  // methods
+  cancelSelection () {
+    for (const p of this.selectedPoints) {
+      p.selected = false
+    }
+  }
+  deleteSelection () {
+    compositions.deleteSelectedPoints()
+  }
 }
 </script>
 
@@ -114,4 +166,10 @@ div#image-wrapper
     top: 0
     left: 0
     z-index: 2
+  .floating
+    position: absolute
+    top: 20px
+    left: 20px
+    max-width: 90vw
+    z-index: 3
 </style>

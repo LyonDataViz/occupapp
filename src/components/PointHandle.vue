@@ -7,6 +7,21 @@
     <path
       :d="d"
     />
+    <circle
+      class="select"
+      fill="transparent"
+      cx="0"
+      cy="0"
+      :r="radius"
+      :stroke-dasharray="strokeDashArray"
+      :stroke-dashoffset="strokeDashOffset"
+    />
+    <path
+      class="icon"
+      v-show="selected"
+      :d="icon"
+      :transform="iconTransform"
+    />
   </g>
 </template>
 
@@ -15,6 +30,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import * as d3 from 'd3'
+import { mdiCheck } from '@mdi/js'
 
 @Component
 export default class PointHandle extends Vue {
@@ -23,9 +39,14 @@ export default class PointHandle extends Vue {
   @Prop({ default: 0 }) readonly y!: number
   @Prop({ default: 300 }) readonly width!: number
   @Prop({ default: 150 }) readonly height!: number
+  @Prop({ default: false }) readonly selected!: boolean
+  @Prop({ default: false }) readonly selecting!: boolean
 
   // local data
   radius = 15
+  selectionProgress = 0
+  selectionInterval = 0
+  selectionStartTimeout = 0
 
   // annotate refs type
   $refs!: {
@@ -33,11 +54,29 @@ export default class PointHandle extends Vue {
   }
 
   // computed
+  get mdiIconSize () {
+    return 24
+  }
+  get icon () {
+    return mdiCheck
+  }
+  get iconTransform () {
+    return `translate(${-this.mdiIconSize / 2},${-this.mdiIconSize / 2})`
+  }
   get g () {
     return d3.select<SVGGElement, unknown>(this.$refs.g)
   }
   get symbolSize (): number {
     return this.radius * this.radius * 4
+  }
+  get circumference (): number {
+    return 2 * Math.PI * this.radius
+  }
+  get strokeDashArray (): number {
+    return Math.round(this.circumference * 1000) / 1000
+  }
+  get strokeDashOffset (): string {
+    return ((100 - this.selectionProgress) / 100) * this.circumference + 'px'
   }
   get xScale () {
     return d3
@@ -81,14 +120,53 @@ export default class PointHandle extends Vue {
 
   // methods
   dragStarted () {
-    this.g.classed('dragged', true)
+    if (this.selecting) {
+      this.toggleSelected()
+    } else {
+      this.g.classed('dragged', true)
+      this.initSelecting()
+    }
   }
   dragged () {
-    this.$emit('update:x', this.x + this.xScale.invert(d3.event.dx))
-    this.$emit('update:y', this.y + this.yScale.invert(d3.event.dy))
+    if (!this.selecting) {
+      this.cancelSelecting()
+      this.$emit('update:x', this.x + this.xScale.invert(d3.event.dx))
+      this.$emit('update:y', this.y + this.yScale.invert(d3.event.dy))
+      this.initSelecting()
+    }
   }
   dragEnded () {
-    this.g.classed('dragged', false)
+    if (!this.selecting) {
+      this.cancelSelecting()
+      this.g.classed('dragged', false)
+    }
+  }
+  initSelecting () {
+    this.cancelSelecting()
+    this.selectionStartTimeout = setTimeout(() => {
+      this.runSelecting()
+    }, 500)
+  }
+  runSelecting () {
+    this.selectionInterval = setInterval(() => {
+      if (this.selectionProgress < 100) {
+        this.selectionProgress += 2
+      } else {
+        this.commitSelected()
+      }
+    }, 10)
+  }
+  cancelSelecting () {
+    clearInterval(this.selectionInterval)
+    clearTimeout(this.selectionStartTimeout)
+    this.selectionProgress = 0
+  }
+  commitSelected () {
+    this.cancelSelecting()
+    this.$emit('update:selected', true)
+  }
+  toggleSelected () {
+    this.$emit('update:selected', !this.selected)
   }
 }
 </script>
@@ -106,4 +184,11 @@ export default class PointHandle extends Vue {
     opacity: 0.9
     stroke-opacity: 0.5
     filter: url(#elevation8)
+
+  .select
+    stroke-width: 5
+    stroke: black
+  .icon
+    stroke: none
+    fill: var(--v-primary-base)
 </style>
