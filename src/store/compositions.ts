@@ -16,6 +16,10 @@ export interface Composition {
     points: Point[];
 }
 
+function random10To90 () {
+  return Math.random() * 80 + 10
+}
+
 @Module({ dynamic: true, store, name: 'compositions' })
 export default class Compositions extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
@@ -140,5 +144,9 @@ export default class Compositions extends VuexModule {
   @Mutation
   addCenterPoint () {
     this.all[this.currentId].points.push({ x: 50, y: 50, selected: false })
+  }
+  @Mutation
+  addRandomPoint () {
+    this.all[this.currentId].points.push({ x: random10To90(), y: random10To90(), selected: false })
   }
 }

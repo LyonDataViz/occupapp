@@ -173,7 +173,7 @@ export default class Home extends Vue {
     compositions.deleteSelectedPoints()
   }
   addPoint () {
-    compositions.addCenterPoint()
+    compositions.addRandomPoint()
   }
 }
 </script>
