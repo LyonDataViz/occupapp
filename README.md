@@ -48,6 +48,12 @@ Other targets:
   npm run lint
   ```
 
+- release a new version
+
+  ```
+  npm run release
+  ```
+
 Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
 Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading
 Vue CLI with `npm install -g @vue/cli`).

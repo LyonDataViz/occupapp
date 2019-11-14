@@ -9,7 +9,8 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "deploy": "now",
-    "now-build": "npm run build"
+    "now-build": "npm run build",
+    "release": "standard-version"
   },
   "dependencies": {
     "core-js": "^3.3.5",
@@ -45,6 +46,7 @@
     "now": "^16.5.2",
     "sass": "^1.23.1",
     "sass-loader": "^8.0.0",
+    "standard-version": "^7.0.0",
     "typeface-roboto": "0.0.75",
     "typescript": "~3.5.3",
     "vue-class-component": "^7.1.0",
