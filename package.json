@@ -42,7 +42,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.13.0",
-    "now": "^16.4.4",
+    "now": "^16.5.2",
     "sass": "^1.23.1",
     "sass-loader": "^8.0.0",
     "typeface-roboto": "0.0.75",
