@@ -103,4 +103,8 @@ export default class Compositions extends VuexModule {
   deleteSelectedPoints () {
     store.commit('setCurrentPoints', this.all[this.currentId].points.filter(p => !p.selected))
   }
+  @Mutation
+  addCenterPoint () {
+    this.all[this.currentId].points.push({ x: 50, y: 50, selected: false })
+  }
 }

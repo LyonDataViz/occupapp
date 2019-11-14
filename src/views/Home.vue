@@ -48,6 +48,21 @@
           :width="width"
           :height="height"
         />
+        <v-btn
+          class="button"
+          key="1"
+          color="amber"
+          fab
+          large
+          dark
+          bottom
+          left
+          @click="addPoint"
+        >
+          <v-icon color="black">
+            {{ buttonIcon }}
+          </v-icon>
+        </v-btn>
       </div>
     </v-row>
   </v-container>
@@ -57,6 +72,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
+import { mdiPlus } from '@mdi/js'
 
 import Compositions, { Point, Composition } from '@/store/compositions.ts'
 
@@ -94,6 +110,9 @@ export default class Home extends Vue {
   }
   get container (): HTMLElement {
     return this.$refs.container
+  }
+  get buttonIcon (): string {
+    return mdiPlus
   }
 
   // methods
@@ -153,6 +172,9 @@ export default class Home extends Vue {
   deleteSelection () {
     compositions.deleteSelectedPoints()
   }
+  addPoint () {
+    compositions.addCenterPoint()
+  }
 }
 </script>
 
@@ -171,5 +193,10 @@ div#image-wrapper
     top: 20px
     left: 20px
     max-width: 90vw
+    z-index: 4
+  .button
+    position: absolute
+    bottom: 30px
+    right: 30px
     z-index: 3
 </style>
