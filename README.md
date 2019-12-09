@@ -56,7 +56,10 @@ Other targets:
 
 Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
 Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading
-Vue CLI with `npm install -g @vue/cli`).
+Vue CLI with `npm install -g @vue/cli`). Other dependencies might be updated
+directly with `npm`, taking care not to break the ones managed by Vue CLI (in
+particular, by now, Vue CLI dependencies require ESLint 5, so don't upgrade to
+ESLint 6).
 
 To lint with Atom Editor, install linter-eslint, add
 `, source.ts, text.html.vue` to the "List of scopes", and unselect "Lint HTML
