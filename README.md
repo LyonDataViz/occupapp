@@ -56,6 +56,8 @@ Other targets:
   npm run release
   ```
 
+  and edit [VERSIONS.md](./VERSIONS.md).
+
 Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
 Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading
 Vue CLI with `npm install -g @vue/cli`). Other dependencies might be updated
