@@ -2,7 +2,7 @@
 
 Discover the space occupation of agents in a scene.
 
-https://occupapp.severo1.now.sh/
+https://occupapp.now.sh/
 
 ## Install
 
