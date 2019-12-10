@@ -1,16 +1,16 @@
 <template>
   <div>
     <v-subheader>
-      Agents
+      Points
     </v-subheader>
     <v-list dense>
       <v-list-item
-        v-for="(agent, i) in agents"
+        v-for="(point, i) in points"
         :key="i"
       >
         <v-list-item-action>
           <v-checkbox
-            v-model="agent.selected"
+            v-model="point.selected"
           />
         </v-list-item-action>
         <v-list-item-content>
@@ -40,9 +40,9 @@ import Compositions, { Point, Composition } from '@/store/compositions.ts'
 const compositions = getModule(Compositions)
 
 @Component
-export default class Agents extends Vue {
+export default class PointsList extends Vue {
   // computed
-  get agents (): Point[] {
+  get points (): Point[] {
     return compositions.current.points
   }
 }

@@ -27,7 +27,7 @@
         class="grey lighten-4"
         dense
       >
-        <Agents />
+        <PointsList />
       </v-list>
       <template v-slot:append>
         <v-divider />
@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import Agents from '@/components/Agents.vue'
+import PointsList from '@/components/PointsList.vue'
 import GalleryButton from '@/components/GalleryButton.vue'
 import Infos from '@/components/Infos.vue'
 
@@ -57,7 +57,7 @@ export default Vue.extend({
     drawer: true
   }),
   components: {
-    Agents,
+    PointsList,
     GalleryButton,
     Infos
   }
