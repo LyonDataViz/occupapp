@@ -18,8 +18,8 @@
             <v-img
               :src="src"
               class="grey lighten-2 text-right pa-2"
-              width="50px"
-              height="50px"
+              width="64px"
+              height="64px"
               aspect-ratio="1"
               @click="toggle"
             >
