@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-subheader>
-      Background images
+      Background image
     </v-subheader>
     <v-container>
       <v-item-group
