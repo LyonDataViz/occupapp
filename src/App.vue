@@ -26,6 +26,8 @@
       >
         <Gallery />
         <v-divider />
+        <Agents />
+        <v-divider />
       </v-list>
       <template v-slot:append>
         <v-divider />
@@ -45,6 +47,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import Agents from '@/components/Agents.vue'
 import Gallery from '@/components/Gallery.vue'
 import Infos from '@/components/Infos.vue'
 
@@ -54,6 +57,7 @@ export default Vue.extend({
     drawer: true
   }),
   components: {
+    Agents,
     Gallery,
     Infos
   }
