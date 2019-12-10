@@ -12,6 +12,9 @@
       >
         Occupapp&nbsp;<span class="font-weight-light">Voronoï</span>
       </router-link>
+      <v-spacer />
+
+      <GalleryButton />
     </v-app-bar>
 
     <v-navigation-drawer
@@ -24,10 +27,7 @@
         class="grey lighten-4"
         dense
       >
-        <Gallery />
-        <v-divider />
         <Agents />
-        <v-divider />
       </v-list>
       <template v-slot:append>
         <v-divider />
@@ -48,7 +48,7 @@
 import Vue from 'vue'
 
 import Agents from '@/components/Agents.vue'
-import Gallery from '@/components/Gallery.vue'
+import GalleryButton from '@/components/GalleryButton.vue'
 import Infos from '@/components/Infos.vue'
 
 export default Vue.extend({
@@ -58,7 +58,7 @@ export default Vue.extend({
   }),
   components: {
     Agents,
-    Gallery,
+    GalleryButton,
     Infos
   }
 })

@@ -1,56 +1,54 @@
 <template>
-  <div>
-    <v-subheader>
-      Background image
-    </v-subheader>
-    <v-container>
-      <v-item-group
-        v-model="selected"
-        mandatory
+  <v-container>
+    <v-item-group
+      v-model="selected"
+      mandatory
+    >
+      <v-row
+        dense
       >
-        <v-row dense>
-          <v-col
-            v-for="(src,i) in srcs"
-            :key="i"
+        <v-col
+          v-for="(src,i) in srcs"
+          :key="i"
+          cols="auto"
+        >
+          <v-item
+            v-slot:default="{ active, toggle }"
           >
-            <v-item
-              v-slot:default="{ active, toggle }"
+            <v-img
+              :src="src"
+              class="grey lighten-2 text-right pa-2"
+              width="50px"
+              height="50px"
+              aspect-ratio="1"
+              @click="toggle"
             >
-              <v-img
-                :src="src"
-                class="grey lighten-2 text-right pa-2"
-                width="50px"
-                height="50px"
-                aspect-ratio="1"
-                @click="toggle"
+              <v-overlay
+                absolute
               >
-                <v-overlay
-                  absolute
+                <v-btn
+                  icon
+                  dark
+                  class="select-image"
                 >
-                  <v-btn
-                    icon
-                    dark
-                    class="select-image"
+                  <v-icon
+                    large
+                    :class="{active}"
                   >
-                    <v-icon
-                      large
-                      :class="{active}"
-                    >
-                      mdi-check
-                    </v-icon>
-                  </v-btn>
-                </v-overlay>
-              </v-img>
-            </v-item>
-          </v-col>
-        </v-row>
-      </v-item-group>
-      <v-switch
-        v-model="isColored"
-        label="Show image colors"
-      />
-    </v-container>
-  </div>
+                    mdi-check
+                  </v-icon>
+                </v-btn>
+              </v-overlay>
+            </v-img>
+          </v-item>
+        </v-col>
+      </v-row>
+    </v-item-group>
+    <v-switch
+      v-model="isColored"
+      label="Show image colors"
+    />
+  </v-container>
 </template>
 
 <style scoped>
