@@ -1,52 +1,64 @@
 <template>
-  <v-container class="pa-0">
+  <v-container>
+    <v-subheader>
+      Background images
+    </v-subheader>
     <v-item-group
       v-model="selected"
       mandatory
-      class="flex-columns"
     >
-      <v-item
-        v-for="(src,i) in srcs"
-        :key="i"
-        v-slot:default="{ active, toggle }"
-      >
-        <v-img
-          :src="src"
-          class="grey lighten-2 text-right pa-2"
-          width="100%"
-          aspect-ratio="1"
-          @click="toggle"
+      <v-row dense>
+        <v-col
+          v-for="(src,i) in srcs"
+          :key="i"
         >
-          <v-overlay
-            absolute
+          <v-item
+            v-slot:default="{ active, toggle }"
           >
-            <v-btn
-              icon
-              dark
-              class="select-image"
+            <v-img
+              :src="src"
+              class="grey lighten-2 text-right pa-2"
+              width="50px"
+              height="50px"
+              aspect-ratio="1"
+              @click="toggle"
             >
-              <v-icon
-                large
-                :class="{active}"
+              <v-overlay
+                absolute
               >
-                mdi-check
-              </v-icon>
-            </v-btn>
-          </v-overlay>
-        </v-img>
-      </v-item>
+                <v-btn
+                  icon
+                  dark
+                  class="select-image"
+                >
+                  <v-icon
+                    large
+                    :class="{active}"
+                  >
+                    mdi-check
+                  </v-icon>
+                </v-btn>
+              </v-overlay>
+            </v-img>
+          </v-item>
+        </v-col>
+      </v-row>
     </v-item-group>
   </v-container>
 </template>
 
 <style scoped>
-.v-btn.select-image .v-icon {
-  color: transparent
+.v-subheader {
+  text-transform: uppercase;
 }
-.v-btn.select-image .v-icon.active,
-.v-image:hover .v-btn.select-image .v-icon,
-.v-btn.select-image:focus-within .v-icon {
-  color: currentColor
+.v-overlay {
+  opacity: 0
+}
+.v-item--active .v-overlay,
+.v-overlay:hover,
+.v-overlay:focus,
+.v-overlay:active {
+  opacity: 1;
 }
 </style>
 

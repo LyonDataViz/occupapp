@@ -16,11 +16,20 @@
 
     <v-navigation-drawer
       v-model="drawer"
+      class="grey lighten-4"
       app
       clipped
-      mini-variant
     >
-      <Gallery />
+      <v-list
+        class="grey lighten-4"
+        dense
+      >
+        <Gallery />
+        <v-divider
+          dark
+          class="my-4"
+        />
+      </v-list>
     </v-navigation-drawer>
 
     <!-- Sizes your content based upon application components -->
