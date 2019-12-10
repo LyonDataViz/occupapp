@@ -28,8 +28,10 @@ import * as d3 from 'd3'
 
 import * as pictures from '@/utils/pictures.ts'
 import Compositions, { Point } from '@/store/compositions.ts'
+import Settings from '@/store/settings.ts'
 
 const compositions = getModule(Compositions)
+const settings = getModule(Settings)
 
 @Component
 export default class Handles extends Vue {
@@ -111,6 +113,9 @@ export default class Handles extends Vue {
     // Note .hex() will be obsolete in d3-color, see https://github.com/d3/d3-color#color_formatHex and https://www.npmjs.com/package/@types/d3
     return (i: number): string => colors[i % 4].hex()
   }
+  get isColored (): boolean {
+    return settings.showImageColors
+  }
   // lifecycle hook
   mounted () {
     this.fetchImage(this.pictureId)
@@ -124,7 +129,13 @@ export default class Handles extends Vue {
     this.ctx.clearRect(0, 0, this.width, this.height)
     // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
     // TODO confirm above comment
-    this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+    if (this.isColored) {
+      this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+    } else {
+      this.ctx.filter = 'grayscale(100%)'
+      this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+      this.ctx.filter = 'grayscale(0%)'
+    }
     this.drawVoronoi(this.ctx)
     if (this.debug) {
       const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + pictures.getName(this.pictureId)
@@ -170,6 +181,7 @@ export default class Handles extends Vue {
   @Watch('height')
   @Watch('devicePixelRatio')
   @Watch('points', { deep: true })
+  @Watch('isColored')
   onSomethingChange (val: number | HTMLImageElement, oldVal: number | HTMLImageElement) {
     // See https://stackoverflow.com/a/37588776/7351594
     this.isCanvasRendering = true

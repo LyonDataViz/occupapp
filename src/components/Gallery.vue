@@ -45,6 +45,10 @@
           </v-col>
         </v-row>
       </v-item-group>
+      <v-switch
+        v-model="isColored"
+        label="Show image colors"
+      />
     </v-container>
   </div>
 </template>
@@ -70,9 +74,11 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 
 import Compositions from '@/store/compositions.ts'
+import Settings from '@/store/settings.ts'
 import * as pictures from '@/utils/pictures.ts'
 
 const compositions = getModule(Compositions)
+const settings = getModule(Settings)
 
 @Component
 export default class Gallery extends Vue {
@@ -85,6 +91,12 @@ export default class Gallery extends Vue {
   }
   set selected (pictureId: number) {
     compositions.setCurrentByPictureId(pictureId)
+  }
+  get isColored (): boolean {
+    return settings.showImageColors
+  }
+  set isColored (value: boolean) {
+    settings.setShowImageColors(value)
   }
 }
 </script>
