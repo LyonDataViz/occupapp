@@ -1,10 +1,19 @@
 # VERSIONS
 
-In this file, you will find information about all the major and minor versions
-of [Occupapp](https://github.com/LyonDataViz/occupapp).
+All the major and minor versions
+of [Occupapp](https://github.com/LyonDataViz/occupapp) are listed here.
 
-Note: the file is maintained manually. If it turns to be outdated, please
-[fill an issue](https://github.com/LyonDataViz/occupapp/issues).
+*Note: the file is maintained manually. If it turns to be outdated, please
+[fill an issue](https://github.com/LyonDataViz/occupapp/issues).*
+
+## v1.1.0
+
+- [Online demo](https://occupapp-qf17v5yfl.now.sh)
+- [Changelog](https://github.com/LyonDataViz/occupapp/blob/master/CHANGELOG.md#110-2019-11-14)
+- [Milestone](https://github.com/LyonDataViz/occupapp/milestone/2?closed=1)
+- [Download](https://github.com/LyonDataViz/occupapp/releases/tag/v1.1.0)
+
+## Instructions to maintainers
 
 To add a new version:
 
@@ -17,10 +26,3 @@ To add a new version:
 - see https://github.com/LyonDataViz/occupapp/releases for the Download URL.
 - see https://github.com/LyonDataViz/occupapp/blob/master/CHANGELOG.md for the
   Changelog URL.
-
-## v1.1.0
-
-- [Online demo](https://occupapp-qf17v5yfl.now.sh)
-- [Changelog](https://github.com/LyonDataViz/occupapp/blob/master/CHANGELOG.md#110-2019-11-14)
-- [Milestone](https://github.com/LyonDataViz/occupapp/milestone/2?closed=1)
-- [Download](https://github.com/LyonDataViz/occupapp/releases/tag/v1.1.0)

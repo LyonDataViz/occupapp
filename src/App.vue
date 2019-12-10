@@ -25,11 +25,12 @@
         dense
       >
         <Gallery />
-        <v-divider
-          dark
-          class="my-4"
-        />
+        <v-divider />
       </v-list>
+      <template v-slot:append>
+        <v-divider />
+        <Infos />
+      </template>
     </v-navigation-drawer>
 
     <!-- Sizes your content based upon application components -->
@@ -45,14 +46,16 @@
 import Vue from 'vue'
 
 import Gallery from '@/components/Gallery.vue'
+import Infos from '@/components/Infos.vue'
 
 export default Vue.extend({
   name: 'App',
   data: () => ({
-    drawer: null
+    drawer: true
   }),
   components: {
-    Gallery
+    Gallery,
+    Infos
   }
 })
 </script>

@@ -1,50 +1,52 @@
 <template>
-  <v-container>
+  <div>
     <v-subheader>
       Background images
     </v-subheader>
-    <v-item-group
-      v-model="selected"
-      mandatory
-    >
-      <v-row dense>
-        <v-col
-          v-for="(src,i) in srcs"
-          :key="i"
-        >
-          <v-item
-            v-slot:default="{ active, toggle }"
+    <v-container>
+      <v-item-group
+        v-model="selected"
+        mandatory
+      >
+        <v-row dense>
+          <v-col
+            v-for="(src,i) in srcs"
+            :key="i"
           >
-            <v-img
-              :src="src"
-              class="grey lighten-2 text-right pa-2"
-              width="50px"
-              height="50px"
-              aspect-ratio="1"
-              @click="toggle"
+            <v-item
+              v-slot:default="{ active, toggle }"
             >
-              <v-overlay
-                absolute
+              <v-img
+                :src="src"
+                class="grey lighten-2 text-right pa-2"
+                width="50px"
+                height="50px"
+                aspect-ratio="1"
+                @click="toggle"
               >
-                <v-btn
-                  icon
-                  dark
-                  class="select-image"
+                <v-overlay
+                  absolute
                 >
-                  <v-icon
-                    large
-                    :class="{active}"
+                  <v-btn
+                    icon
+                    dark
+                    class="select-image"
                   >
-                    mdi-check
-                  </v-icon>
-                </v-btn>
-              </v-overlay>
-            </v-img>
-          </v-item>
-        </v-col>
-      </v-row>
-    </v-item-group>
-  </v-container>
+                    <v-icon
+                      large
+                      :class="{active}"
+                    >
+                      mdi-check
+                    </v-icon>
+                  </v-btn>
+                </v-overlay>
+              </v-img>
+            </v-item>
+          </v-col>
+        </v-row>
+      </v-item-group>
+    </v-container>
+  </div>
 </template>
 
 <style scoped>
