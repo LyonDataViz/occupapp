@@ -130,8 +130,7 @@ export default class PointHandle extends Vue {
   dragged () {
     if (!this.selecting) {
       this.cancelSelecting()
-      this.$emit('update:x', this.x + this.xScale.invert(d3.event.dx))
-      this.$emit('update:y', this.y + this.yScale.invert(d3.event.dy))
+      this.$emit('updatexy', { x: this.x + this.xScale.invert(d3.event.dx), y: this.y + this.yScale.invert(d3.event.dy) })
       this.initSelecting()
     }
   }
@@ -163,10 +162,10 @@ export default class PointHandle extends Vue {
   }
   commitSelected () {
     this.cancelSelecting()
-    this.$emit('update:selected', true)
+    this.$emit('select')
   }
   toggleSelected () {
-    this.$emit('update:selected', !this.selected)
+    this.$emit('toggle')
   }
 }
 </script>

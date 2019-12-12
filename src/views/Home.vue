@@ -74,12 +74,18 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { mdiPlus } from '@mdi/js'
 
-import Compositions, { Point, Composition } from '@/store/compositions.ts'
+import Compositions, { Composition } from '@/store/compositions.ts'
+import Categories from '@/store/categories.ts'
+import PointsSelection from '@/store/pointsSelection.ts'
+import Points from '@/store/points.ts'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
 
 const compositions = getModule(Compositions)
+const categories = getModule(Categories)
+const pointsSelection = getModule(PointsSelection)
+const points = getModule(Points)
 
 @Component({
   components: {
@@ -147,33 +153,23 @@ export default class Home extends Vue {
     requestAnimationFrame(this.checkLoop)
   }
 
-  get points (): Point[] {
-    return compositions.current.points
-  }
-  set points (points: Point[]) {
-    compositions.setCurrentPoints(points)
-  }
-  get selectedPoints (): Point[] {
-    return this.points.filter(p => p.selected === true)
-  }
   get selectedPointsText (): string {
-    return `${this.selectedPoints.length} ${this.selectedPoints.length === 1 ? 'point' : 'points'}`
+    return `${pointsSelection.size} ${pointsSelection.size === 1 ? 'point' : 'points'}`
   }
   get showBanner (): boolean {
-    return this.selectedPoints.length > 0
+    return pointsSelection.size > 0
   }
 
   // methods
   cancelSelection () {
-    for (const p of this.selectedPoints) {
-      p.selected = false
-    }
+    pointsSelection.clear()
   }
   deleteSelection () {
-    compositions.deleteSelectedPoints()
+    points.deleteSet(pointsSelection.asSet)
+    pointsSelection.clear()
   }
   addPoint () {
-    compositions.addRandomPoint()
+    points.postRandom(categories.defaultId)
   }
 }
 </script>

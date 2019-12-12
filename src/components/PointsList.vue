@@ -4,21 +4,22 @@
       Points
     </v-subheader>
     <v-list dense>
-      <v-list-item
-        v-for="(point, i) in points"
-        :key="i"
+      <v-list-item-group
+        v-model="pointsIdxSelectionArray"
+        multiple
+        color="indigo"
       >
-        <v-list-item-action>
-          <v-checkbox
-            v-model="point.selected"
-          />
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title
-            v-text="`Agent ${i}`"
-          />
-        </v-list-item-content>
-      </v-list-item>
+        <v-list-item
+          v-for="point of pointsArray"
+          :key="point.id"
+        >
+          <v-list-item-content>
+            <v-list-item-title
+              v-text="`x: ${Math.round(point.x)}, y: ${Math.round(point.y)}`"
+            />
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
   </div>
 </template>
@@ -35,15 +36,37 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
 
-import Compositions, { Point, Composition } from '@/store/compositions.ts'
+import Points, { Point } from '@/store/points.ts'
+import PointsSelection from '@/store/pointsSelection.ts'
 
-const compositions = getModule(Compositions)
+const points = getModule(Points)
+const pointsSelection = getModule(PointsSelection)
 
 @Component
 export default class PointsList extends Vue {
   // computed
-  get points (): Point[] {
-    return compositions.current.points
+  get pointsArray (): Point[] {
+    return points.asArray
+  }
+  get pointsIdxSelectionArray (): number[] {
+    // v-list-item-group only allows to manage indexes of an array. We have to
+    // transform the uuid to integers
+    // https://vuetifyjs.com/en/components/list-item-groups
+    const pointsSelectionSet = pointsSelection.asSet
+    const arr: number[] = []
+    // we have to loop on this.pointsArray to get the same indexes as in the
+    // v-list-item element in the template
+    // TODO: improve this?
+    this.pointsArray.forEach((p, idx) => {
+      if (pointsSelectionSet.has(p.id)) {
+        arr.push(idx)
+      }
+    })
+    return arr
+  }
+  set pointsIdxSelectionArray (idxArray: number[]) {
+    // transform the index array back to a uuid array
+    pointsSelection.fromArray(idxArray.map(idx => this.pointsArray[idx].id))
   }
 }
 </script>

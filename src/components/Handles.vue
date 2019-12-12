@@ -9,9 +9,14 @@
     </defs>
     <g class="points">
       <PointHandle
-        v-for="(point, index) of points"
-        :key="index"
-        v-bind.sync="point"
+        v-for="(point, idx) of pointsArray"
+        :key="idx"
+        :x="point.x"
+        :y="point.y"
+        @updatexy="updateXY(point.id, $event.x, $event.y)"
+        :selected="isSelected(point.id)"
+        @select="select(point.id)"
+        @toggle="toggle(point.id)"
         :width="width"
         :height="height"
         :selecting="selecting"
@@ -23,18 +28,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop, Watch } from 'vue-property-decorator'
+import { Prop } from 'vue-property-decorator'
 import { getModule } from 'vuex-module-decorators'
-import * as d3 from 'd3'
 
 import FilterShadow2 from '@/components/FilterShadow2.vue'
 import FilterShadow8 from '@/components/FilterShadow8.vue'
 import PointHandle from '@/components/PointHandle.vue'
 
-import * as pictures from '@/utils/pictures.ts'
-import Compositions, { Point, Composition } from '@/store/compositions.ts'
+import Points, { Point } from '@/store/points.ts'
+import PointsSelection from '@/store/pointsSelection.ts'
 
-const compositions = getModule(Compositions)
+const points = getModule(Points)
+const pointsSelection = getModule(PointsSelection)
 
 @Component({
   components: {
@@ -62,23 +67,25 @@ export default class Handles extends Vue {
     }
   }
 
-  get current (): Composition {
-    return compositions.current
-  }
-  get points (): Point[] {
-    return this.current.points
-  }
-  set points (points: Point[]) {
-    compositions.setCurrentPoints(points)
+  get pointsArray (): Point[] {
+    return points.asArray
   }
   get selecting (): boolean {
-    return this.points.some(p => p.selected === true)
+    return pointsSelection.size > 0
   }
 
-  // lifecycle hook
-  // mounted () {
-  // }
-
   // methods
+  updateXY (pointId: string, x: number, y: number): void {
+    points.setXY({ id: pointId, x, y })
+  }
+  select (pointId: string):void {
+    pointsSelection.add(pointId)
+  }
+  toggle (pointId: string):void {
+    pointsSelection.toggle(pointId)
+  }
+  isSelected (pointId: string): boolean {
+    return pointsSelection.has(pointId)
+  }
 }
 </script>

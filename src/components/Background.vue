@@ -27,10 +27,14 @@ import { Delaunay } from 'd3-delaunay'
 import * as d3 from 'd3'
 
 import * as pictures from '@/utils/pictures.ts'
-import Compositions, { Point } from '@/store/compositions.ts'
+import Categories, { Category } from '@/store/categories.ts'
+import Compositions from '@/store/compositions.ts'
+import Points, { Point } from '@/store/points.ts'
 import Settings from '@/store/settings.ts'
 
+const categories = getModule(Categories)
 const compositions = getModule(Compositions)
+const points = getModule(Points)
 const settings = getModule(Settings)
 
 @Component
@@ -77,8 +81,8 @@ export default class Handles extends Vue {
   get pictureId (): number {
     return compositions.currentPictureId
   }
-  get points (): Point[] {
-    return compositions.current.points
+  get pointsArray (): Point[] {
+    return points.asArray
   }
   // TODO check if there is a best practice for use of 'private' keyword,a nd if we follow it
   private get isPlaceholderVisible (): boolean {
@@ -101,17 +105,10 @@ export default class Handles extends Vue {
   }
   get voronoi () {
     return Delaunay.from(
-      this.points,
+      this.pointsArray,
       (d: Point): number => this.x(d.x),
       (d: Point): number => this.y(d.y)
     ).voronoi([0, 0, this.canvasWidth, this.canvasHeight])
-  }
-  get color () {
-    const colors =
-      [d3.rgb(255, 195, 8), d3.rgb(172, 159, 253), d3.rgb(181, 246, 66), d3.rgb(239, 106, 222)]
-
-    // Note .hex() will be obsolete in d3-color, see https://github.com/d3/d3-color#color_formatHex and https://www.npmjs.com/package/@types/d3
-    return (i: number): string => colors[i % 4].hex()
   }
   get isColored (): boolean {
     return settings.showImageColors
@@ -149,11 +146,11 @@ export default class Handles extends Vue {
     context.save()
     const v = this.voronoi
     let i = 0
-    for (const d of this.points) {
+    for (const point of this.pointsArray) {
       context.beginPath()
       v.renderCell(i++, context)
       context.globalAlpha = 0.2
-      context.fillStyle = this.color(i)
+      context.fillStyle = categories.get(point.categoryId).color
       context.fill()
 
       context.globalAlpha = 1
@@ -180,7 +177,7 @@ export default class Handles extends Vue {
   @Watch('width')
   @Watch('height')
   @Watch('devicePixelRatio')
-  @Watch('points', { deep: true })
+  @Watch('pointsArray', { deep: true })
   @Watch('isColored')
   onSomethingChange (val: number | HTMLImageElement, oldVal: number | HTMLImageElement) {
     // See https://stackoverflow.com/a/37588776/7351594

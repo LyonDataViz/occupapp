@@ -1,26 +1,15 @@
 // See https://championswimmer.in/vuex-module-decorators/
-import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
-
-export interface Point {
-  x: number
-  y: number
-  selected: boolean
-}
 
 export interface Composition {
     id: number;
     pictureId: number;
     pictureWidth: number;
     pictureHeight: number;
-    points: Point[];
 }
 
-function random10To90 () {
-  return Math.random() * 80 + 10
-}
-
-@Module({ dynamic: true, store, name: 'compositions' })
+@Module({ dynamic: true, store, name: 'compositions', namespaced: true })
 export default class Compositions extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
 
@@ -30,61 +19,57 @@ export default class Compositions extends VuexModule {
     { id: 0,
       pictureId: 0, // 'petanque'
       pictureWidth: 2620,
-      pictureHeight: 1745,
-      points: [
-        { x: 50.1, y: 60.5, selected: false },
-        { x: 36.5, y: 87.4, selected: false },
-        { x: 17.9, y: 73.0, selected: false },
-        { x: 28.2, y: 36.6, selected: false },
-        { x: 49.9, y: 36.5, selected: false },
-        { x: 76.2, y: 27.9, selected: false },
-        { x: 87.9, y: 35.9, selected: false }
-      ]
+      pictureHeight: 1745
+      // points: [
+      //   { x: 50.1, y: 60.5 },
+      //   { x: 36.5, y: 87.4 },
+      //   { x: 17.9, y: 73.0 },
+      //   { x: 28.2, y: 36.6 },
+      //   { x: 49.9, y: 36.5 },
+      //   { x: 76.2, y: 27.9 },
+      //   { x: 87.9, y: 35.9 }
+      // ]
     },
     { id: 1,
       pictureId: 1, // 'boats'
       pictureWidth: 3992,
-      pictureHeight: 2992,
-      points: []
+      pictureHeight: 2992
     },
     { id: 2,
       pictureId: 2, // 'honeycomb'
       pictureWidth: 2901,
-      pictureHeight: 2176,
-      points: []
+      pictureHeight: 2176
     },
     { id: 3,
       pictureId: 3, // 'spider'
       pictureWidth: 1925,
-      pictureHeight: 1444,
-      points: []
+      pictureHeight: 1444
     },
     { id: 4,
       pictureId: 4, // 'wolves'
       pictureWidth: 2208,
-      pictureHeight: 1500,
-      points: []
+      pictureHeight: 1500
     },
     { id: 5,
       pictureId: 5, // 'bazzania'
       pictureWidth: 1936,
-      pictureHeight: 1288,
-      points: [
-        { x: 50, y: 40, selected: false },
-        { x: 50, y: 60, selected: false },
-        { x: 40, y: 50, selected: false },
-        { x: 60, y: 50, selected: false }
-      ]
+      pictureHeight: 1288
+      // points: [
+      //   { x: 50, y: 40 },
+      //   { x: 50, y: 60 },
+      //   { x: 40, y: 50 },
+      //   { x: 60, y: 50 }
+      // ]
     }, { id: 6,
       pictureId: 6, // 'basketball'
       pictureWidth: 2362,
-      pictureHeight: 1533,
-      points: []
+      pictureHeight: 1533
+
     }, { id: 7,
       pictureId: 7, // 'beach'
       pictureWidth: 3511,
-      pictureHeight: 1975,
-      points: []
+      pictureHeight: 1975
+
     }
   ]
   currentId: number = 0
@@ -126,27 +111,12 @@ export default class Compositions extends VuexModule {
     }
     this.currentId = id
   }
-  @Mutation
+  // Actions
+  @Action
   setCurrentByPictureId (pictureId: number) {
     if (!(pictureId in this.all)) {
       throw new Error(`No composition in "all" for pictureId ${pictureId}. There should be exactly one.`)
     }
-    store.commit('setCurrent', this.all[pictureId].id)
-  }
-  @Mutation
-  setCurrentPoints (points: Point[]) {
-    this.all[this.currentId].points = points
-  }
-  @Mutation
-  deleteSelectedPoints () {
-    store.commit('setCurrentPoints', this.all[this.currentId].points.filter(p => !p.selected))
-  }
-  @Mutation
-  addCenterPoint () {
-    this.all[this.currentId].points.push({ x: 50, y: 50, selected: false })
-  }
-  @Mutation
-  addRandomPoint () {
-    this.all[this.currentId].points.push({ x: random10To90(), y: random10To90(), selected: false })
+    this.setCurrent(this.all[pictureId].id)
   }
 }
