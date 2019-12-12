@@ -2,26 +2,34 @@
   <g
     ref="g"
     class="point"
+    :class="{ 'indigo--text': selected, selected: selected }"
     :transform="transform"
   >
-    <path
-      :d="d"
+    <circle
+      class="background"
+      cx="0"
+      cy="0"
+      :r="radiusBackground"
+    />
+    <circle
+      class="overlay"
+      cx="0"
+      cy="0"
+      :r="radiusBackground"
     />
     <circle
       class="select"
-      fill="transparent"
       cx="0"
       cy="0"
-      :r="radius"
+      :r="radiusSelect"
       :stroke-dasharray="strokeDashArray"
       :stroke-dashoffset="strokeDashOffset"
     />
-    <path
-      class="icon"
-      v-show="selected"
-      :d="icon"
-      :transform="iconTransform"
-    />
+    <text
+      class="text"
+    >
+      {{ text }}
+    </text>
   </g>
 </template>
 
@@ -41,9 +49,11 @@ export default class PointHandle extends Vue {
   @Prop({ default: 150 }) readonly height!: number
   @Prop({ default: false }) readonly selected!: boolean
   @Prop({ default: false }) readonly selecting!: boolean
+  @Prop({ default: '' }) readonly text!: string
 
   // local data
-  radius = 15
+  radiusBackground = 17
+  radiusSelect = 15
   selectionProgress = 0
   selectionInterval = 0
   selectionStartTimeout = 0
@@ -53,24 +63,11 @@ export default class PointHandle extends Vue {
     g: SVGGElement,
   }
 
-  // computed
-  get mdiIconSize () {
-    return 24
-  }
-  get icon () {
-    return mdiCheck
-  }
-  get iconTransform () {
-    return `translate(${-this.mdiIconSize / 2},${-this.mdiIconSize / 2})`
-  }
   get g () {
     return d3.select<SVGGElement, unknown>(this.$refs.g)
   }
-  get symbolSize (): number {
-    return this.radius * this.radius * 4
-  }
   get circumference (): number {
-    return 2 * Math.PI * this.radius
+    return 2 * Math.PI * this.radiusSelect
   }
   get strokeDashArray (): number {
     return Math.round(this.circumference * 1000) / 1000
@@ -98,12 +95,6 @@ export default class PointHandle extends Vue {
   }
   get transform (): string {
     return `translate(${this.xAtScale}, ${this.yAtScale})`
-  }
-  get d (): string {
-    return d3
-      .symbol()
-      .type(d3.symbolCircle)
-      .size(this.symbolSize)() || ''
   }
   get drag () {
     return d3
@@ -173,10 +164,9 @@ export default class PointHandle extends Vue {
 
 <style lang="sass">
 .point
-  fill: white
-  opacity: 0.7
   cursor: pointer
-  stroke: black
+  opacity: 0.7
+
   &:hover
     opacity: 0.9
     filter: url(#elevation2)
@@ -184,11 +174,32 @@ export default class PointHandle extends Vue {
     opacity: 0.9
     stroke-opacity: 0.5
     filter: url(#elevation8)
+  &.selected
+    opacity: 0.9
+    circle.background
+      stroke: currentColor
+    circle.overlay
+      stroke: none
+      fill: currentColor
+      opacity: 1
+    text.text
+      fill: background
 
-  .select
+  circle.background
+    fill: white
+    stroke: black
+  circle.overlay
+    opacity: 0
+  circle.select
+    fill: transparent
     stroke-width: 5
     stroke: black
-  .icon
+  text.text
+    dominant-baseline: central
+    text-anchor: middle
     stroke: none
-    fill: var(--v-primary-base)
+    fill: currentColor
+    font-size: 15px
+    font-weight: bold
+
 </style>

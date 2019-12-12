@@ -17,6 +17,7 @@
         :selected="isSelected(point.id)"
         @select="select(point.id)"
         @toggle="toggle(point.id)"
+        :text="`${point.number}`"
         :width="width"
         :height="height"
         :selecting="selecting"

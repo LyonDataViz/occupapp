@@ -17,6 +17,7 @@ export interface PointWithoutId {
 
 export interface Point extends PointWithoutId {
   id: string;
+  number: number;
 }
 
 function random10To90 () {
@@ -31,6 +32,7 @@ export default class Points extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
   list: Map<string, Point> = new Map()
   listChangeTracker: number = 1
+  nextNumber = 1
 
   // Getters - cached, not meant to be exported
   get asMap (): Map<string, Point> {
@@ -75,6 +77,10 @@ export default class Points extends VuexModule {
     this.list.delete(id)
     this.listChangeTracker += 1
   }
+  @Mutation
+  incrementNextNumber () {
+    this.nextNumber += 1
+  }
   // Actions
   // Important: actions only receive 1 argument (payload). If you want to
   // receive various arguments -> fields of an Object
@@ -88,7 +94,8 @@ export default class Points extends VuexModule {
   }
   @Action
   post (p: PointWithoutId) {
-    this.set({ id: uuid.v4(), ...p })
+    this.set({ id: uuid.v4(), ...p, number: this.nextNumber })
+    this.incrementNextNumber()
   }
   @Action
   deleteSet (ids: Set<string>) {
