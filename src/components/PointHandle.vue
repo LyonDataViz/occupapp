@@ -162,6 +162,7 @@ export default class PointHandle extends Vue {
   }
   commitSelected () {
     this.cancelSelecting()
+    this.g.classed('dragged', false)
     this.$emit('select')
   }
   toggleSelected () {
