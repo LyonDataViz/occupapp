@@ -15,6 +15,14 @@
       :style="canvasStyle"
       v-show="isCanvasVisible"
     />
+    <ImageCacheCanvas
+      :width="width"
+      :height="height"
+      :device-pixel-ratio="devicePixelRatio"
+      :image="image"
+      :is-colored="isColored"
+      @update:canvas="updateCache"
+    />
   </div>
 </template>
 
@@ -26,7 +34,10 @@ import { Prop, Watch } from 'vue-property-decorator'
 import { Delaunay } from 'd3-delaunay'
 import * as d3 from 'd3'
 
+import ImageCacheCanvas from '@/components/ImageCacheCanvas.vue'
+
 import * as pictures from '@/utils/pictures.ts'
+
 import Categories, { Category } from '@/store/categories.ts'
 import Compositions from '@/store/compositions.ts'
 import Points, { Point } from '@/store/points.ts'
@@ -37,8 +48,12 @@ const compositions = getModule(Compositions)
 const points = getModule(Points)
 const settings = getModule(Settings)
 
-@Component
-export default class Handles extends Vue {
+@Component({
+  components: {
+    ImageCacheCanvas
+  }
+})
+export default class Background extends Vue {
   // props
   @Prop({ default: 300 }) readonly width!: number
   @Prop({ default: 150 }) readonly height!: number
@@ -47,6 +62,8 @@ export default class Handles extends Vue {
   // local data
   debug = false
   image: HTMLImageElement = new Image()
+  imageCacheCanvas: HTMLCanvasElement | undefined = undefined
+  imageCacheCanvasChangeTracker: number = 1
   debounceTimer: number = 0
   isImageLoading: boolean = true
   isCanvasRendering: boolean = false
@@ -119,6 +136,11 @@ export default class Handles extends Vue {
   }
 
   // methods
+  updateCache (canvas: HTMLCanvasElement) {
+    this.imageCacheCanvas = canvas
+    this.imageCacheCanvasChangeTracker += 1
+  }
+
   drawCanvas (): void {
     if (this.ctx === null) { return }
     // Redraw & reposition content
@@ -126,13 +148,10 @@ export default class Handles extends Vue {
     this.ctx.clearRect(0, 0, this.width, this.height)
     // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
     // TODO confirm above comment
-    if (this.isColored) {
-      this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
-    } else {
-      this.ctx.filter = 'grayscale(100%)'
-      this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
-      this.ctx.filter = 'grayscale(0%)'
+    if (this.imageCacheCanvas !== undefined) {
+      this.ctx.drawImage(this.imageCacheCanvas, 0, 0, this.width, this.height)
     }
+
     this.drawVoronoi(this.ctx)
     if (this.debug) {
       const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + pictures.getName(this.pictureId)
@@ -173,13 +192,12 @@ export default class Handles extends Vue {
     this.fetchImage(pictureId)
   }
 
-  @Watch('image')
+  @Watch('imageCacheCanvasChangeTracker')
   @Watch('width')
   @Watch('height')
   @Watch('devicePixelRatio')
   @Watch('pointsArray', { deep: true })
-  @Watch('isColored')
-  onSomethingChange (val: number | HTMLImageElement, oldVal: number | HTMLImageElement) {
+  onSomethingChange () {
     // See https://stackoverflow.com/a/37588776/7351594
     this.isCanvasRendering = true
     clearTimeout(this.debounceTimer)
@@ -187,13 +205,11 @@ export default class Handles extends Vue {
       // Note how we use an arrow function to get access to the "this" object
       // See https://stackoverflow.com/a/38737108/7351594
 
-      if (!this.isImageLoading) {
-        // Always change the size before rendering (because size change cleans the canvas)
-        this.canvas.width = this.canvasWidth
-        this.canvas.height = this.canvasHeight
-        this.drawCanvas()
-        this.isCanvasRendering = false
-      }
+      // Always change the size before rendering (because size change cleans the canvas)
+      this.canvas.width = this.canvasWidth
+      this.canvas.height = this.canvasHeight
+      this.drawCanvas()
+      this.isCanvasRendering = false
     }, 10)
   }
 }
