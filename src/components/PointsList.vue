@@ -15,7 +15,7 @@
         >
           <v-list-item-content>
             <v-list-item-title
-              v-text="`x: ${Math.round(point.x)}, y: ${Math.round(point.y)}`"
+              v-text="`Point ${point.number} (x: ${Math.round(point.x)}, y: ${Math.round(point.y)})`"
             />
           </v-list-item-content>
         </v-list-item>
