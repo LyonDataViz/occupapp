@@ -6,7 +6,7 @@ import store from '@/store'
 export default class Settings extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
 
-  showImageColors: boolean = false
+  showImageColors: boolean = true
 
   // Mutations (synchronous)
   @Mutation
