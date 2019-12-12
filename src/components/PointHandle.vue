@@ -143,12 +143,12 @@ export default class PointHandle extends Vue {
   }
   initSelecting () {
     this.cancelSelecting()
-    this.selectionStartTimeout = setTimeout(() => {
+    this.selectionStartTimeout = window.setTimeout(() => {
       this.runSelecting()
     }, 500)
   }
   runSelecting () {
-    this.selectionInterval = setInterval(() => {
+    this.selectionInterval = window.setInterval(() => {
       if (this.selectionProgress < 100) {
         this.selectionProgress += 2
       } else {

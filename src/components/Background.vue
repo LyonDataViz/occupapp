@@ -186,7 +186,7 @@ export default class Handles extends Vue {
     // See https://stackoverflow.com/a/37588776/7351594
     this.isCanvasRendering = true
     clearTimeout(this.debounceTimer)
-    this.debounceTimer = setTimeout(() => {
+    this.debounceTimer = window.setTimeout(() => {
       // Note how we use an arrow function to get access to the "this" object
       // See https://stackoverflow.com/a/38737108/7351594
 
