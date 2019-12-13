@@ -41,11 +41,13 @@ import * as pictures from '@/utils/pictures.ts'
 import Categories, { Category } from '@/store/categories.ts'
 import Compositions from '@/store/compositions.ts'
 import Points, { Point } from '@/store/points.ts'
+import PointsMetrics from '@/store/pointsMetrics.ts'
 import Settings from '@/store/settings.ts'
 
 const categories = getModule(Categories)
 const compositions = getModule(Compositions)
 const points = getModule(Points)
+const pointsMetrics = getModule(PointsMetrics)
 const settings = getModule(Settings)
 
 @Component({
@@ -86,6 +88,9 @@ export default class Background extends Vue {
   get canvasHeight (): number {
     return this.height * this.devicePixelRatio
   }
+  get totalArea (): number {
+    return this.width * this.height
+  }
   get canvasStyle (): {width: string, height: string} {
     return {
       width: `${this.width}px`,
@@ -125,7 +130,7 @@ export default class Background extends Vue {
       this.pointsArray,
       (d: Point): number => this.x(d.x),
       (d: Point): number => this.y(d.y)
-    ).voronoi([0, 0, this.canvasWidth, this.canvasHeight])
+    ).voronoi([0, 0, this.width, this.height])
   }
   get isColored (): boolean {
     return settings.showImageColors
@@ -180,6 +185,21 @@ export default class Background extends Vue {
     context.restore()
   }
 
+  updateAreas (): void {
+    let i = 0
+    for (const point of this.pointsArray) {
+      const polygon: [number, number][] = this.voronoi.cellPolygon(i++).map(
+        // this is only to adjust a TypeScript mismatch between d3-delaunay and
+        // d3-polygon
+        // See https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/d3-delaunay/index.d.ts#L159
+        // and https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/d3-polygon/index.d.ts
+        p => [p[0], p[1]]
+      )
+      const area = Math.abs(d3.polygonArea(polygon)) / this.totalArea
+      pointsMetrics.setArea({ pointId: point.id, area })
+    }
+  }
+
   async fetchImage (pictureId: number) {
     this.isImageLoading = true
     this.image = await pictures.fetchImage(pictureId)
@@ -209,6 +229,7 @@ export default class Background extends Vue {
       this.canvas.width = this.canvasWidth
       this.canvas.height = this.canvasHeight
       this.drawCanvas()
+      this.updateAreas()
       this.isCanvasRendering = false
     }, 10)
   }

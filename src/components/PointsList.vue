@@ -15,7 +15,7 @@
         >
           <v-list-item-content>
             <v-list-item-title
-              v-text="`Point ${point.number} (x: ${Math.round(point.x)}, y: ${Math.round(point.y)})`"
+              v-text="`Point ${point.number} (x: ${Math.round(point.x)}, y: ${Math.round(point.y)}${getAreaString(point.id)})`"
             />
           </v-list-item-content>
         </v-list-item>
@@ -37,9 +37,11 @@ import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
 
 import Points, { Point } from '@/store/points.ts'
+import PointsMetrics from '@/store/pointsMetrics.ts'
 import PointsSelection from '@/store/pointsSelection.ts'
 
 const points = getModule(Points)
+const pointsMetrics = getModule(PointsMetrics)
 const pointsSelection = getModule(PointsSelection)
 
 @Component
@@ -67,6 +69,11 @@ export default class PointsList extends Vue {
   set pointsIdxSelectionArray (idxArray: number[]) {
     // transform the index array back to a uuid array
     pointsSelection.fromArray(idxArray.map(idx => this.pointsArray[idx].id))
+  }
+  // Methods
+  getAreaString (id: string): string {
+    const area = pointsMetrics.getArea(id)
+    return area ? `, area: ${Math.round(100 * area.area)}%` : ``
   }
 }
 </script>
