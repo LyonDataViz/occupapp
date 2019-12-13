@@ -70,6 +70,11 @@ export default class Compositions extends VuexModule {
       pictureWidth: 3511,
       pictureHeight: 1975
 
+    }, { id: 8,
+      pictureId: 8, // 'cuzco'
+      pictureWidth: 2376,
+      pictureHeight: 1584
+
     }
   ]
   currentId: number = 0

@@ -36,7 +36,8 @@ const names: string[] = [
   'wolves',
   'bazzania',
   'basketball',
-  'beach'
+  'beach',
+  'cuzco'
 ]
 const widths: number[] = [320, 640, 768, 1024, 1366, 1600, 1920]
 const sortedWidth: number[] = [...widths].sort((a: number, b: number): number => a - b)
