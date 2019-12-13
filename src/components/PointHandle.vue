@@ -183,7 +183,7 @@ export default class PointHandle extends Vue {
       fill: currentColor
       opacity: 1
     text.text
-      fill: background
+      fill: white
 
   circle.background
     fill: white
