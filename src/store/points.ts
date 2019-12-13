@@ -18,13 +18,14 @@ export interface PointWithoutId {
 export interface Point extends PointWithoutId {
   id: string;
   number: number;
+  area: number;
 }
 
 function random10To90 () {
   return Math.random() * 80 + 10
 }
 
-@Module({ dynamic: true, store, name: 'points' })//, namespaced: true })
+@Module({ dynamic: true, store, name: 'points', namespaced: true })
 export default class Points extends VuexModule {
   // IMPORTANT. We use a hack to add Vue reactivity to Map and Set objects
   // See https://stackoverflow.com/a/45441321/7351594
