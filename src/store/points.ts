@@ -18,7 +18,6 @@ export interface PointWithoutId {
 export interface Point extends PointWithoutId {
   id: string;
   number: number;
-  area: number;
 }
 
 function random10To90 () {
