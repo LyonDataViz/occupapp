@@ -15,8 +15,25 @@
         >
           <v-list-item-content>
             <v-list-item-title
-              v-text="`Point ${point.number} (x: ${Math.round(point.x)}, y: ${Math.round(point.y)}${getAreaString(point.id)})`"
+              v-text="`Point ${point.number}`"
             />
+            <v-list-item-subtitle
+              v-text="getAreaString(point.id)"
+            />
+            <svg
+              width="100%"
+              height="10px"
+              viewBox="0 0 100 10"
+              preserveAspectRatio="none"
+            >
+              <rect
+                x="0"
+                y="0"
+                :width="getArea(point.id)"
+                height="10"
+                :fill="getColor(point.categoryId)"
+              />
+            </svg>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -36,10 +53,12 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
 
+import Categories from '@/store/categories.ts'
 import Points, { Point } from '@/store/points.ts'
 import PointsMetrics from '@/store/pointsMetrics.ts'
 import PointsSelection from '@/store/pointsSelection.ts'
 
+const categories = getModule(Categories)
 const points = getModule(Points)
 const pointsMetrics = getModule(PointsMetrics)
 const pointsSelection = getModule(PointsSelection)
@@ -71,9 +90,16 @@ export default class PointsList extends Vue {
     pointsSelection.fromArray(idxArray.map(idx => this.pointsArray[idx].id))
   }
   // Methods
+  getArea (id: string): number {
+    const area = pointsMetrics.getArea(id)
+    return area ? 100 * area.area : 0
+  }
   getAreaString (id: string): string {
     const area = pointsMetrics.getArea(id)
-    return area ? `, area: ${Math.round(100 * area.area)}%` : ``
+    return area ? `Area: ${Math.round(100 * area.area)}%` : ``
+  }
+  getColor (id: string): string {
+    return categories.getColor(id)
   }
 }
 </script>
