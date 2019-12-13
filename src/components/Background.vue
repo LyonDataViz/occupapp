@@ -173,8 +173,8 @@ export default class Background extends Vue {
     for (const point of this.pointsArray) {
       context.beginPath()
       v.renderCell(i++, context)
-      context.globalAlpha = 0.2
-      context.fillStyle = categories.get(point.categoryId).color
+      context.globalAlpha = 0.5
+      context.fillStyle = categories.getColor(point.categoryId)
       context.fill()
 
       context.globalAlpha = 1
