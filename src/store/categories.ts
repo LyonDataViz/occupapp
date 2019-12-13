@@ -12,6 +12,7 @@ export interface Category extends CategoryWithoutId {
   id: string;
 }
 
+const defaultId = uuid.v4()
 const defaultColor = d3.rgb(0, 0, 0, 0.3)
 const defaultPalette = [d3.rgb(255, 195, 8), d3.rgb(172, 159, 253), d3.rgb(181, 246, 66), d3.rgb(239, 106, 222)]
 
@@ -30,9 +31,10 @@ export default class Categories extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
   list: Map<string, Category> = initList()
   listChangeTracker: number = 1
+  currentCategoryId: string = defaultId
 
   default: Category = {
-    id: uuid.v4(),
+    id: defaultId,
     // Note .hex() will be obsolete in d3-color, see https://github.com/d3/d3-color#color_formatHex and https://www.npmjs.com/package/@types/d3
     color: defaultColor.hex()
   }
@@ -41,8 +43,6 @@ export default class Categories extends VuexModule {
   get defaultId (): string {
     return this.default.id
   }
-
-  // Getters - cached, not meant to be exported
   get asMap (): Map<string, Category> {
     // By using `listChangeTracker` we tell Vue that this property depends on it,
     // so it gets re-evaluated whenever `listChangeTracker` changes - HACK
@@ -57,10 +57,13 @@ export default class Categories extends VuexModule {
   get get (): (id:string) => Category {
     return (id:string): Category => this.asMap.get(id) || this.default
   }
+  get keys (): IterableIterator<string> {
+    return this.asMap.keys()
+  }
+  get keysArray (): string[] {
+    return [...this.keys]
+  }
   // USE?
-  // get keys (): IterableIterator<string> {
-  //   return this.asMap.keys()
-  // }
   // get values (): IterableIterator<Point> {
   //   return this.asMap.values()
   // }
@@ -85,6 +88,11 @@ export default class Categories extends VuexModule {
     this.list.delete(id)
     this.listChangeTracker += 1
   }
+  @Mutation
+  setCurrentCategoryId (id: string) {
+    this.currentCategoryId = id
+  }
+
   // Actions
   @Action
   fromArray (list: Category[]) {
@@ -115,5 +123,17 @@ export default class Categories extends VuexModule {
     } else {
       throw RangeError(`There is no category id=${id} in the list`)
     }
+  }
+  // Used to assign a category by default
+  @Action
+  nextId (): string {
+    const keys = this.keysArray
+    if (keys.length === 0) {
+      return this.defaultId
+    }
+    const index = keys.indexOf(this.currentCategoryId)
+    const nextId = keys[(index + 1) % keys.length]
+    this.setCurrentCategoryId(nextId)
+    return nextId
   }
 }

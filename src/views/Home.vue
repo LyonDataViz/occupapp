@@ -168,8 +168,8 @@ export default class Home extends Vue {
     points.deleteSet(pointsSelection.asSet)
     pointsSelection.clear()
   }
-  addPoint () {
-    points.postRandom(categories.defaultId)
+  async addPoint () {
+    points.postRandom(await categories.nextId())
   }
 }
 </script>
