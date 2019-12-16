@@ -20,8 +20,29 @@ export interface Point extends PointWithoutId {
   number: number;
 }
 
+export type Domain = [number, number]
+
 function random10To90 () {
   return Math.random() * 80 + 10
+}
+
+const xDomain: Domain = [0, 100]
+const yDomain: Domain = [0, 100]
+
+function clampToDomain (z: number, domain: Domain): number {
+  if (z < domain[0]) {
+    return domain[0]
+  }
+  if (z > domain[1]) {
+    return domain[1]
+  }
+  return z
+}
+
+function clampPoint (point: Point): Point {
+  point.x = clampToDomain(+point.x, xDomain)
+  point.y = clampToDomain(+point.y, yDomain)
+  return point
 }
 
 @Module({ dynamic: true, store, name: 'points', namespaced: true })
@@ -69,7 +90,8 @@ export default class Points extends VuexModule {
   }
   @Mutation
   set (point: Point) {
-    this.list.set(point.id, point)
+    // Don't allow positions outside of [0, 100]
+    this.list.set(point.id, clampPoint(point))
     this.listChangeTracker += 1
   }
   @Mutation
