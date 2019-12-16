@@ -6,6 +6,7 @@
     >
       <v-row
         dense
+        class="images-row"
       >
         <v-col
           v-for="(src,i) in srcs"
@@ -63,6 +64,10 @@
 .v-overlay:focus,
 .v-overlay:active {
   opacity: 1;
+}
+.images-row {
+  max-height: 250px;
+  overflow-y: auto;
 }
 </style>
 
