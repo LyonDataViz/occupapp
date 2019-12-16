@@ -22,7 +22,7 @@ export interface Point extends PointWithoutId {
 
 export type Domain = [number, number]
 
-function random10To90 () {
+function random10To90 (): number {
   return Math.random() * 80 + 10
 }
 
