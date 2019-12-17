@@ -116,7 +116,6 @@ export default class Home extends Vue {
 
   // computed
   get aspectRatio () {
-    // TODO utiliser mapGetters?
     return backgroundImage.aspectRatio
   }
   get container (): HTMLElement {
