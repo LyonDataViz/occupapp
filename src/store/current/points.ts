@@ -1,4 +1,4 @@
-// Points (or agents) of the current composition
+// Current points (or agents)
 
 // See https://championswimmer.in/vuex-module-decorators/
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'

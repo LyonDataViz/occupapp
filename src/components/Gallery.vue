@@ -9,7 +9,7 @@
         class="images-row"
       >
         <v-col
-          v-for="(src,i) in srcs"
+          v-for="(gallerySrc,i) in gallerySrcsArray"
           :key="i"
           cols="auto"
         >
@@ -17,7 +17,7 @@
             v-slot:default="{ active, toggle }"
           >
             <v-img
-              :src="src"
+              :src="gallerySrc.thumbnailSrc"
               class="grey lighten-2 text-right pa-2"
               width="64px"
               height="64px"
@@ -76,24 +76,37 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 
-import ExportableCompositions from '@/store/exportableCompositions.ts'
-import Settings from '@/store/settings.ts'
-import * as pictures from '@/utils/severo_pictures.ts'
+import { gallerySrcs, GallerySrc } from '@/utils/severo_pictures.ts'
 
-const compositions = getModule(ExportableCompositions)
+import Settings from '@/store/settings.ts'
+import BackgroundImage from '@/store/current/backgroundImage.ts'
+
+const backgroundImage = getModule(BackgroundImage)
 const settings = getModule(Settings)
 
 @Component
 export default class Gallery extends Vue {
-  get srcs (): string[] {
-    // TODO improve safety of picture identification. Currently it only depends on the idx in pictures.thumbnailSrcs array
-    return pictures.thumbnailSrcs
+  gallerySrcs: Map<string, GallerySrc> = new Map(gallerySrcs.map(gs => [gs.src, gs]))
+
+  get gallerySrcsArray (): GallerySrc[] {
+    return [...this.gallerySrcs.values()]
+  }
+  get srcsArray (): string[] {
+    return [...this.gallerySrcs.keys()]
   }
   get selected (): number {
-    return compositions.currentPictureId
+    if (this.gallerySrcs.has(backgroundImage.src)) {
+      return this.srcsArray.indexOf(backgroundImage.src)
+    } else if (this.gallerySrcs.size > 0) {
+      // By default: the first one
+      return 0
+    } else {
+      // TODO: improve this
+      throw RangeError('No background images in the gallery. This case is not manage for now.')
+    }
   }
-  set selected (pictureId: number) {
-    compositions.setCurrentByPictureId(pictureId)
+  set selected (idx: number) {
+    backgroundImage.fromSrc(this.srcsArray[idx])
   }
   get isColored (): boolean {
     return settings.showImageColors

@@ -74,7 +74,7 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { mdiPlus } from '@mdi/js'
 
-import ExportableCompositions, { Composition } from '@/store/exportableCompositions.ts'
+import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
 import PointsSelection from '@/store/current/pointsSelection.ts'
 import Points from '@/store/current/points.ts'
@@ -82,7 +82,7 @@ import Points from '@/store/current/points.ts'
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
 
-const compositions = getModule(ExportableCompositions)
+const backgroundImage = getModule(BackgroundImage)
 const categories = getModule(Categories)
 const pointsSelection = getModule(PointsSelection)
 const points = getModule(Points)
@@ -106,13 +106,16 @@ export default class Home extends Vue {
 
   // lifecycle hook
   mounted () {
+    // Init the background image
+    backgroundImage.initWithSomething()
+    // Then launch the size check loop
     this.checkLoop()
   }
 
   // computed
   get aspectRatio () {
     // TODO utiliser mapGetters?
-    return compositions.currentAspectRatio
+    return backgroundImage.aspectRatio
   }
   get container (): HTMLElement {
     return this.$refs.container

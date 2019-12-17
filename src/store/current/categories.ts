@@ -1,4 +1,4 @@
-// Categories of the current composition
+// Current categories
 
 // See https://championswimmer.in/vuex-module-decorators/
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'

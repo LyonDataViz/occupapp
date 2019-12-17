@@ -36,18 +36,17 @@ import * as d3 from 'd3'
 
 import ImageCacheCanvas from '@/components/ImageCacheCanvas.vue'
 
-import * as pictures from '@/utils/severo_pictures.ts'
 import Settings from '@/store/settings.ts'
-import ExportableCompositions from '@/store/exportableCompositions.ts'
+import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
 import Points, { Point } from '@/store/current/points.ts'
 import PointsMetrics from '@/store/current/pointsMetrics.ts'
 
+const settings = getModule(Settings)
+const backgroundImage = getModule(BackgroundImage)
 const categories = getModule(Categories)
-const compositions = getModule(ExportableCompositions)
 const points = getModule(Points)
 const pointsMetrics = getModule(PointsMetrics)
-const settings = getModule(Settings)
 
 @Component({
   components: {
@@ -61,11 +60,9 @@ export default class Background extends Vue {
   @Prop({ default: 1 }) readonly devicePixelRatio!: number
 
   // local data
-  image: HTMLImageElement = new Image()
   imageCacheCanvas: HTMLCanvasElement | undefined = undefined
   imageCacheCanvasChangeTracker: number = 1
   debounceTimer: number = 0
-  isImageLoading: boolean = true
   isCanvasRendering: boolean = false
 
   // annotate refs type
@@ -74,6 +71,9 @@ export default class Background extends Vue {
   }
 
   // computed
+  get image (): HTMLImageElement {
+    return backgroundImage.image
+  }
   get canvas (): HTMLCanvasElement {
     return this.$refs.imagecanvas
   }
@@ -98,15 +98,12 @@ export default class Background extends Vue {
   get wrapperStyle (): {width: string, height: string} {
     return { ...this.canvasStyle }
   }
-  get pictureId (): number {
-    return compositions.currentPictureId
-  }
   get pointsArray (): Point[] {
     return points.asArray
   }
   // TODO check if there is a best practice for use of 'private' keyword,a nd if we follow it
   private get isPlaceholderVisible (): boolean {
-    return this.isImageLoading
+    return !backgroundImage.isReady
   }
   private get isCanvasVisible (): boolean {
     return !this.isPlaceholderVisible
@@ -132,10 +129,6 @@ export default class Background extends Vue {
   }
   get isColored (): boolean {
     return settings.showImageColors
-  }
-  // lifecycle hook
-  mounted () {
-    this.fetchImage(this.pictureId)
   }
 
   // methods
@@ -192,17 +185,7 @@ export default class Background extends Vue {
     }
   }
 
-  async fetchImage (pictureId: number) {
-    this.isImageLoading = true
-    this.image = await pictures.fetchImage(pictureId)
-    this.isImageLoading = false
-  }
-
   // watchers
-  @Watch('pictureId')
-  onPictureIdChange (pictureId: number, oldPictureId: number) {
-    this.fetchImage(pictureId)
-  }
 
   @Watch('imageCacheCanvasChangeTracker')
   @Watch('width')
