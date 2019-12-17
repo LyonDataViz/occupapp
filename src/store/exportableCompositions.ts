@@ -9,8 +9,8 @@ export interface Composition {
     pictureHeight: number;
 }
 
-@Module({ dynamic: true, store, name: 'compositions', namespaced: true })
-export default class Compositions extends VuexModule {
+@Module({ dynamic: true, store, name: 'exportableCompositions', namespaced: true })
+export default class ExportableCompositions extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
 
   // Currently: 1-to-1 correspondance between pictures and compositions

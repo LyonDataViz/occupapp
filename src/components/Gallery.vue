@@ -76,11 +76,11 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 
-import Compositions from '@/store/compositions.ts'
+import ExportableCompositions from '@/store/exportableCompositions.ts'
 import Settings from '@/store/settings.ts'
-import * as pictures from '@/utils/pictures.ts'
+import * as pictures from '@/utils/severo_pictures.ts'
 
-const compositions = getModule(Compositions)
+const compositions = getModule(ExportableCompositions)
 const settings = getModule(Settings)
 
 @Component

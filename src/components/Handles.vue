@@ -36,8 +36,8 @@ import FilterShadow2 from '@/components/FilterShadow2.vue'
 import FilterShadow8 from '@/components/FilterShadow8.vue'
 import PointHandle from '@/components/PointHandle.vue'
 
-import Points, { Point } from '@/store/points.ts'
-import PointsSelection from '@/store/pointsSelection.ts'
+import Points, { Point } from '@/store/current/points.ts'
+import PointsSelection from '@/store/current/pointsSelection.ts'
 
 const points = getModule(Points)
 const pointsSelection = getModule(PointsSelection)

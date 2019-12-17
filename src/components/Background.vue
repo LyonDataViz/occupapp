@@ -36,16 +36,15 @@ import * as d3 from 'd3'
 
 import ImageCacheCanvas from '@/components/ImageCacheCanvas.vue'
 
-import * as pictures from '@/utils/pictures.ts'
-
-import Categories, { Category } from '@/store/categories.ts'
-import Compositions from '@/store/compositions.ts'
-import Points, { Point } from '@/store/points.ts'
-import PointsMetrics from '@/store/pointsMetrics.ts'
+import * as pictures from '@/utils/severo_pictures.ts'
 import Settings from '@/store/settings.ts'
+import ExportableCompositions from '@/store/exportableCompositions.ts'
+import Categories from '@/store/current/categories.ts'
+import Points, { Point } from '@/store/current/points.ts'
+import PointsMetrics from '@/store/current/pointsMetrics.ts'
 
 const categories = getModule(Categories)
-const compositions = getModule(Compositions)
+const compositions = getModule(ExportableCompositions)
 const points = getModule(Points)
 const pointsMetrics = getModule(PointsMetrics)
 const settings = getModule(Settings)

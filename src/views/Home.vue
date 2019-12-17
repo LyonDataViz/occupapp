@@ -74,15 +74,15 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { mdiPlus } from '@mdi/js'
 
-import Compositions, { Composition } from '@/store/compositions.ts'
-import Categories from '@/store/categories.ts'
-import PointsSelection from '@/store/pointsSelection.ts'
-import Points from '@/store/points.ts'
+import ExportableCompositions, { Composition } from '@/store/exportableCompositions.ts'
+import Categories from '@/store/current/categories.ts'
+import PointsSelection from '@/store/current/pointsSelection.ts'
+import Points from '@/store/current/points.ts'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
 
-const compositions = getModule(Compositions)
+const compositions = getModule(ExportableCompositions)
 const categories = getModule(Categories)
 const pointsSelection = getModule(PointsSelection)
 const points = getModule(Points)
