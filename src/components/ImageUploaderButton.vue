@@ -5,10 +5,10 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        icon
+        text
         v-on="on"
       >
-        <v-icon>mdi-paperclip</v-icon>
+        <v-icon>mdi-paperclip</v-icon> Add images
       </v-btn>
     </template>
     <v-card>

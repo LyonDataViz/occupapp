@@ -46,11 +46,8 @@
         </v-col>
       </v-row>
     </v-item-group>
+
     <ImageUploaderButton @update:files="addFiles($event)" />
-    <v-switch
-      v-model="isColored"
-      label="Show image colors"
-    />
   </v-container>
 </template>
 
@@ -84,12 +81,10 @@ import ImageUploaderButton from '@/components/ImageUploaderButton.vue'
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Composition from '@/store/current/composition.ts'
 import GalleryImages from '@/store/galleryImages.ts'
-import Settings from '@/store/settings.ts'
 
 const backgroundImage = getModule(BackgroundImage)
 const composition = getModule(Composition)
 const galleryImages = getModule(GalleryImages)
-const settings = getModule(Settings)
 
 @Component({
   components: {
@@ -111,12 +106,6 @@ export default class Gallery extends Vue {
   }
   set selected (idx: number) {
     composition.fromSrc(this.srcsArray[idx])
-  }
-  get isColored (): boolean {
-    return settings.showImageColors
-  }
-  set isColored (value: boolean) {
-    settings.setShowImageColors(value)
   }
   addFiles (files: File[]) {
     galleryImages.appendFilesArray(files)

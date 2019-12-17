@@ -18,6 +18,17 @@
       <v-card-text>
         <Gallery />
       </v-card-text>
+
+      <v-divider class="mx-4" />
+
+      <v-card-title>Colors</v-card-title>
+      <v-card-text>
+        <v-switch
+          v-model="isColored"
+          label="Show image colors"
+        />
+      </v-card-text>
+
       <v-card-actions>
         <v-spacer />
         <v-btn
@@ -39,8 +50,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { getModule } from 'vuex-module-decorators'
 
 import Gallery from '@/components/Gallery.vue'
+
+import Settings from '@/store/settings.ts'
+
+const settings = getModule(Settings)
 
 @Component({
   components: {
@@ -49,6 +65,13 @@ import Gallery from '@/components/Gallery.vue'
 })
 export default class GalleryButton extends Vue {
   dialog: boolean = false
+
+  get isColored (): boolean {
+    return settings.showImageColors
+  }
+  set isColored (value: boolean) {
+    settings.setShowImageColors(value)
+  }
 }
 
 </script>
