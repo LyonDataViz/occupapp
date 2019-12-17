@@ -26,13 +26,14 @@ import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
 import { Delaunay } from 'd3-delaunay'
 import * as d3 from 'd3'
+import { Point } from '@/utils/types.ts'
 
 import ImageCacheCanvas from '@/components/ImageCacheCanvas.vue'
 
 import Settings from '@/store/settings.ts'
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
-import Points, { Point } from '@/store/current/points.ts'
+import Points from '@/store/current/points.ts'
 import PointsMetrics from '@/store/current/pointsMetrics.ts'
 
 const settings = getModule(Settings)

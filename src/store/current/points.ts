@@ -4,23 +4,7 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import uuid from 'uuid'
-
-export interface XYPoint {
-  id: string;
-  x: number;
-  y: number;
-}
-
-export interface PointWithoutId {
-  x: number;
-  y: number;
-  categoryId: string;
-}
-
-export interface Point extends PointWithoutId {
-  id: string;
-  number: number;
-}
+import { Point, XYCategory, XYId } from '@/utils/types.ts'
 
 export type Domain = [number, number]
 
@@ -117,7 +101,7 @@ export default class Points extends VuexModule {
     this.fromMap(new Map())
   }
   @Action
-  post (p: PointWithoutId) {
+  post (p: XYCategory) {
     this.set({ id: uuid.v4(), ...p, number: this.nextNumber })
     this.incrementNextNumber()
   }
@@ -130,7 +114,7 @@ export default class Points extends VuexModule {
     this.fromMap(newList)
   }
   @Action
-  setXY ({ id, x, y }: XYPoint) {
+  setXY ({ id, x, y }: XYId) {
     const point = this.asMap.get(id)
     if (point === undefined) {
       throw RangeError(`There is no point id=${id} in the list`)

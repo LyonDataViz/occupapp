@@ -2,12 +2,13 @@
 
 // See https://championswimmer.in/vuex-module-decorators/
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { ImageSrc } from '@/utils/types.ts'
+
 import store from '@/store'
-import { defaultSrc } from '@/utils/severo_pictures.ts'
 
 // TODO fix a small height and width initially to avoid loading the heaviest image, if srcset exists (responsive image)? is this how onload works?
 // TODO should we also generate a thumbnail?
-async function fetchImage (src: string, srcset: string = ''): Promise<HTMLImageElement> {
+async function fetchImage ({ src, srcset }: ImageSrc): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img: HTMLImageElement = new Image()
     img.onload = () => resolve(img)
@@ -25,6 +26,7 @@ export default class BackgroundImage extends VuexModule {
   image: HTMLImageElement = new Image()
   // TODO: remove this unused variable?
   // isReady: boolean = false
+  // TODO: add thumbnailSrc?
 
   // Getters - cached, not meant to be exported
   get naturalWidth (): number {
@@ -61,9 +63,9 @@ export default class BackgroundImage extends VuexModule {
   // }
 
   @Action
-  async fromSrc (src: string, srcset: string = '') {
+  async fromImageSrc (imageSrc: ImageSrc) {
     // this.setNotReady()
-    this.fromHTMLImageElement(await fetchImage(src, srcset))
+    this.fromHTMLImageElement(await fetchImage(imageSrc))
     // this.setReady()
   }
   @Action

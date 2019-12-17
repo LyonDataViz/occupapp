@@ -31,12 +31,13 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import { getModule } from 'vuex-module-decorators'
+import { Point } from '@/utils/types.ts'
 
 import FilterShadow2 from '@/components/FilterShadow2.vue'
 import FilterShadow8 from '@/components/FilterShadow8.vue'
 import PointHandle from '@/components/PointHandle.vue'
 
-import Points, { Point } from '@/store/current/points.ts'
+import Points from '@/store/current/points.ts'
 import PointsSelection from '@/store/current/pointsSelection.ts'
 
 const points = getModule(Points)

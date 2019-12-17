@@ -5,25 +5,17 @@ import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import uuid from 'uuid'
 import * as d3 from 'd3'
-
-export interface CategoryWithoutId {
-  color: string;
-}
-
-export interface Category extends CategoryWithoutId {
-  id: string;
-}
+import { Color, Category } from '@/utils/types.ts'
 
 const defaultId = uuid.v4()
 const defaultColor = d3.rgb(0, 0, 0, 0.3)
 const defaultPalette = [d3.rgb(255, 195, 8), d3.rgb(172, 159, 253), d3.rgb(181, 246, 66), d3.rgb(239, 106, 222)]
-
-const initList = (): Map<string, Category> => {
-  return new Map(defaultPalette.map(c => {
-    const id = uuid.v4()
-    return [id, { id, color: c.hex() }]
-  }))
-}
+const defaultArray: Category[] = defaultPalette.map(c => {
+  return { id: uuid.v4(), color: c.hex() }
+})
+const defaultMap: Map<string, Category> = new Map(defaultArray.map(c => {
+  return [c.id, c]
+}))
 
 @Module({ dynamic: true, store, name: 'categories', namespaced: true })
 export default class Categories extends VuexModule {
@@ -31,7 +23,7 @@ export default class Categories extends VuexModule {
   // See https://stackoverflow.com/a/45441321/7351594
 
   // State - state of truth - meant to be exported as a JSON - init definitions
-  list: Map<string, Category> = initList()
+  list: Map<string, Category> = defaultMap
   listChangeTracker: number = 1
   currentCategoryId: string = defaultId
 
@@ -44,6 +36,12 @@ export default class Categories extends VuexModule {
   // Getters - cached, not meant to be exported
   get defaultId (): string {
     return this.default.id
+  }
+  get defaultMap (): Map<string, Category> {
+    return defaultMap
+  }
+  get defaultArray (): Category[] {
+    return defaultArray
   }
   get asMap (): Map<string, Category> {
     // By using `listChangeTracker` we tell Vue that this property depends on it,
@@ -108,7 +106,7 @@ export default class Categories extends VuexModule {
     this.fromMap(new Map())
   }
   @Action
-  post (c: CategoryWithoutId) {
+  post (c: Color) {
     const newCategory = { id: uuid.v4(), ...c }
     this.set(newCategory)
   }

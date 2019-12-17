@@ -9,7 +9,7 @@
         class="images-row"
       >
         <v-col
-          v-for="(gallerySrc,i) in gallerySrcsArray"
+          v-for="(imageSrc,i) in imageSrcsArray"
           :key="i"
           cols="auto"
         >
@@ -17,7 +17,8 @@
             v-slot:default="{ active, toggle }"
           >
             <v-img
-              :src="gallerySrc.thumbnailSrc"
+              :src="imageSrc.thumbnailSrc || imageSrc.src"
+              :srcset="imageSrc.srcset"
               class="grey lighten-2 text-right pa-2"
               width="64px"
               height="64px"
@@ -75,24 +76,25 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
+import { ImageSrc } from '@/utils/types.ts'
 
-import { gallerySrcs, GallerySrc } from '@/utils/severo_pictures.ts'
+import { imageSrcs } from '@/utils/severo_pictures.ts'
 
-import Settings from '@/store/settings.ts'
 import BackgroundImage from '@/store/current/backgroundImage.ts'
+import Settings from '@/store/settings.ts'
 
 const backgroundImage = getModule(BackgroundImage)
 const settings = getModule(Settings)
 
 @Component
 export default class Gallery extends Vue {
-  gallerySrcs: Map<string, GallerySrc> = new Map(gallerySrcs.map(gs => [gs.src, gs]))
+  imageSrcs: Map<string, ImageSrc> = new Map(imageSrcs.map(gs => [gs.src, gs]))
 
-  get gallerySrcsArray (): GallerySrc[] {
-    return [...this.gallerySrcs.values()]
+  get imageSrcsArray (): ImageSrc[] {
+    return [...this.imageSrcs.values()]
   }
   get srcsArray (): string[] {
-    return [...this.gallerySrcs.keys()]
+    return [...this.imageSrcs.keys()]
   }
   get selected (): number {
     return this.srcsArray.indexOf(backgroundImage.src)

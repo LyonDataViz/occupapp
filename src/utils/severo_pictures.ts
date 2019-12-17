@@ -1,8 +1,4 @@
-export interface GallerySrc {
-    src: string;
-    srcset: string;
-    thumbnailSrc: string;
-}
+import { ImageSrc } from '@/utils/types.ts'
 
 function forgeUrl (name: string, width: number): string {
   return `https://github.com/severo/pictures/raw/master/images,w_${width}/${name}.jpg`
@@ -24,13 +20,13 @@ const sortedWidth: number[] = [...widths].sort((a: number, b: number): number =>
 const minWidth: number = sortedWidth[0]
 const maxWidth: number = sortedWidth[sortedWidth.length - 1]
 
-const gallerySrcs: GallerySrc[] = names.map(name => {
+const imageSrcs: ImageSrc[] = names.map(name => {
   return {
     src: forgeUrl(name, maxWidth),
     srcset: widths.map(w => `${forgeUrl(name, w)} ${w}w`).join(','),
     thumbnailSrc: forgeUrl(name, minWidth)
   }
 })
-const defaultSrc: GallerySrc = gallerySrcs[0]
+const defaultSrc: ImageSrc = imageSrcs[0]
 
-export { defaultSrc, gallerySrcs }
+export { defaultSrc, imageSrcs }
