@@ -27,6 +27,6 @@ const imageSrcs: ImageSrc[] = names.map(name => {
     thumbnailSrc: forgeUrl(name, minWidth)
   }
 })
-const defaultSrc: ImageSrc = imageSrcs[0]
+const defaultSrc: string = imageSrcs[0].src
 
 export { defaultSrc, imageSrcs }

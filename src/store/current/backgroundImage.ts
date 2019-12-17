@@ -41,6 +41,12 @@ export default class BackgroundImage extends VuexModule {
   get srcset (): string {
     return this.image.srcset
   }
+  get imageSrc (): ImageSrc {
+    return {
+      src: this.image.src,
+      srcset: this.image.srcset
+    }
+  }
 
   get aspectRatio (): number {
     if (this.naturalHeight === 0) {
@@ -67,10 +73,5 @@ export default class BackgroundImage extends VuexModule {
     // this.setNotReady()
     this.fromHTMLImageElement(await fetchImage(imageSrc))
     // this.setReady()
-  }
-  @Action
-  async initWithSomething () {
-    // TODO improve the name and the way to initialize
-    this.fromSrc(defaultSrc.src, defaultSrc.srcset)
   }
 }

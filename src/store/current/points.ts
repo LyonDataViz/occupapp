@@ -69,7 +69,7 @@ export default class Points extends VuexModule {
 
   // Mutations (synchronous)
   @Mutation
-  fromMap (list: Map<string, Point>) {
+  setList (list: Map<string, Point>) {
     this.list = list
     // Trigger Vue updates
     this.listChangeTracker += 1
@@ -86,12 +86,17 @@ export default class Points extends VuexModule {
     this.listChangeTracker += 1
   }
   @Mutation
-  incrementNextNumber () {
-    this.nextNumber += 1
+  setNextNumber (n: number) {
+    this.nextNumber = n
   }
   // Actions
   // Important: actions only receive 1 argument (payload). If you want to
   // receive various arguments -> fields of an Object
+  @Action
+  fromMap (list: Map<string, Point>) {
+    this.setList(list)
+    this.resetNextNumber()
+  }
   @Action
   fromArray (list: Point[]) {
     this.fromMap(new Map(list.map(p => [p.id, p])))
@@ -99,6 +104,16 @@ export default class Points extends VuexModule {
   @Action
   clear () {
     this.fromMap(new Map())
+  }
+  @Action
+  incrementNextNumber () {
+    this.setNextNumber(this.nextNumber + 1)
+  }
+  @Action
+  resetNextNumber () {
+    // Set the next number to the max value among points + 1
+    const m = this.asArray.reduce((a, c) => (c.number > a) ? c.number : a, 0)
+    this.setNextNumber(m + 1)
   }
   @Action
   post (p: XYCategory) {

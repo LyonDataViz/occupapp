@@ -76,6 +76,7 @@ import { mdiPlus } from '@mdi/js'
 
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
+import Composition from '@/store/current/composition.ts'
 import PointsSelection from '@/store/current/pointsSelection.ts'
 import Points from '@/store/current/points.ts'
 
@@ -84,6 +85,7 @@ import Handles from '@/components/Handles.vue'
 
 const backgroundImage = getModule(BackgroundImage)
 const categories = getModule(Categories)
+const composition = getModule(Composition)
 const pointsSelection = getModule(PointsSelection)
 const points = getModule(Points)
 
@@ -106,8 +108,8 @@ export default class Home extends Vue {
 
   // lifecycle hook
   mounted () {
-    // Init the background image
-    backgroundImage.initWithSomething()
+    // Init the composition
+    composition.initWithSomething()
     // Then launch the size check loop
     this.checkLoop()
   }

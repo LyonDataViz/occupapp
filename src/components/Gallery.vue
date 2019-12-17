@@ -81,9 +81,11 @@ import { ImageSrc } from '@/utils/types.ts'
 import { imageSrcs } from '@/utils/severo_pictures.ts'
 
 import BackgroundImage from '@/store/current/backgroundImage.ts'
+import Composition from '@/store/current/composition.ts'
 import Settings from '@/store/settings.ts'
 
 const backgroundImage = getModule(BackgroundImage)
+const composition = getModule(Composition)
 const settings = getModule(Settings)
 
 @Component
@@ -100,7 +102,7 @@ export default class Gallery extends Vue {
     return this.srcsArray.indexOf(backgroundImage.src)
   }
   set selected (idx: number) {
-    backgroundImage.fromSrc(this.srcsArray[idx])
+    composition.fromSrc(this.srcsArray[idx])
   }
   get isColored (): boolean {
     return settings.showImageColors
