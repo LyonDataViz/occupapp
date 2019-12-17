@@ -61,7 +61,6 @@ export default class Background extends Vue {
   @Prop({ default: 1 }) readonly devicePixelRatio!: number
 
   // local data
-  debug = false
   image: HTMLImageElement = new Image()
   imageCacheCanvas: HTMLCanvasElement | undefined = undefined
   imageCacheCanvasChangeTracker: number = 1
@@ -157,12 +156,6 @@ export default class Background extends Vue {
     }
 
     this.drawVoronoi(this.ctx)
-    if (this.debug) {
-      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + pictures.getName(this.pictureId)
-      this.ctx.textAlign = 'center'
-      this.ctx.fillStyle = '#000'
-      this.ctx.fillText(resizeText, this.width / 2, this.height / 2)
-    }
   }
 
   drawVoronoi (context: CanvasRenderingContext2D): void {
