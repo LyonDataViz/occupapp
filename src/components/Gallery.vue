@@ -78,19 +78,19 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { ImageSrc } from '@/utils/types.ts'
 
-import { imageSrcs } from '@/utils/severo_pictures.ts'
-
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Composition from '@/store/current/composition.ts'
+import GalleryImages from '@/store/galleryImages.ts'
 import Settings from '@/store/settings.ts'
 
 const backgroundImage = getModule(BackgroundImage)
 const composition = getModule(Composition)
+const galleryImages = getModule(GalleryImages)
 const settings = getModule(Settings)
 
 @Component
 export default class Gallery extends Vue {
-  imageSrcs: Map<string, ImageSrc> = new Map(imageSrcs.map(gs => [gs.src, gs]))
+  imageSrcs: Map<string, ImageSrc> = galleryImages.asMap
 
   get imageSrcsArray (): ImageSrc[] {
     return [...this.imageSrcs.values()]
