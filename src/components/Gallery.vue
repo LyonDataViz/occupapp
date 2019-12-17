@@ -95,12 +95,7 @@ export default class Gallery extends Vue {
     return [...this.gallerySrcs.keys()]
   }
   get selected (): number {
-    if (this.gallerySrcs.has(backgroundImage.src)) {
-      return this.srcsArray.indexOf(backgroundImage.src)
-    } else {
-      // By default: the first one (if it exists)
-      return 0
-    }
+    return this.srcsArray.indexOf(backgroundImage.src)
   }
   set selected (idx: number) {
     backgroundImage.fromSrc(this.srcsArray[idx])

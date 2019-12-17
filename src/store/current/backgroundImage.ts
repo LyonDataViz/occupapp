@@ -23,7 +23,8 @@ async function fetchImage (src: string, srcset: string = ''): Promise<HTMLImageE
 export default class BackgroundImage extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
   image: HTMLImageElement = new Image()
-  isReady: boolean = false
+  // TODO: remove this unused variable?
+  // isReady: boolean = false
 
   // Getters - cached, not meant to be exported
   get naturalWidth (): number {
@@ -50,20 +51,20 @@ export default class BackgroundImage extends VuexModule {
   fromHTMLImageElement (image: HTMLImageElement) {
     this.image = image
   }
-  @Mutation
-  setNotReady () {
-    this.isReady = false
-  }
-  @Mutation
-  setReady () {
-    this.isReady = true
-  }
+  // @Mutation
+  // setNotReady () {
+  //   this.isReady = false
+  // }
+  // @Mutation
+  // setReady () {
+  //   this.isReady = true
+  // }
 
   @Action
   async fromSrc (src: string, srcset: string = '') {
-    this.setNotReady()
+    // this.setNotReady()
     this.fromHTMLImageElement(await fetchImage(src, srcset))
-    this.setReady()
+    // this.setReady()
   }
   @Action
   async initWithSomething () {

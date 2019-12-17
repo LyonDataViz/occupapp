@@ -51,14 +51,20 @@ export default class ImageCacheCanvas extends Vue {
     // Redraw & reposition content
     this.ctx.setTransform(this.devicePixelRatio, 0, 0, this.devicePixelRatio, 0, 0)
     this.ctx.clearRect(0, 0, this.width, this.height)
-    // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
-    // TODO confirm above comment
-    if (this.isColored) {
-      this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+    if (this.image.width === 0 || this.image.height === 0) {
+      // Show a white rectangle in case the image is empty
+      this.ctx.fillStyle = 'white'
+      this.ctx.fillRect(0, 0, this.width, this.height)
     } else {
-      this.ctx.filter = 'grayscale(100%)'
-      this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
-      this.ctx.filter = 'grayscale(0%)'
+      // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
+      // TODO confirm above comment
+      if (this.isColored) {
+        this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+      } else {
+        this.ctx.filter = 'grayscale(100%)'
+        this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
+        this.ctx.filter = 'grayscale(0%)'
+      }
     }
   }
 

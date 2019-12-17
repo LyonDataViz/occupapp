@@ -4,16 +4,9 @@
     ref="wrapper"
     :style="wrapperStyle"
   >
-    <v-skeleton-loader
-      class="mx-auto"
-      width="300"
-      type="card"
-      v-show="isPlaceholderVisible"
-    />
     <canvas
       ref="imagecanvas"
       :style="canvasStyle"
-      v-show="isCanvasVisible"
     />
     <ImageCacheCanvas
       :width="width"
@@ -100,13 +93,6 @@ export default class Background extends Vue {
   }
   get pointsArray (): Point[] {
     return points.asArray
-  }
-  // TODO check if there is a best practice for use of 'private' keyword,a nd if we follow it
-  private get isPlaceholderVisible (): boolean {
-    return !backgroundImage.isReady
-  }
-  private get isCanvasVisible (): boolean {
-    return !this.isPlaceholderVisible
   }
   get x () {
     return d3
