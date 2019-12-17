@@ -24,8 +24,7 @@ async function fetchImage ({ src, srcset }: ImageSrc): Promise<HTMLImageElement>
 export default class BackgroundImage extends VuexModule {
   // State - state of truth - meant to be exported as a JSON - init definitions
   image: HTMLImageElement = new Image()
-  // TODO: remove this unused variable?
-  // isReady: boolean = false
+  isReady: boolean = false
   // TODO: add thumbnailSrc?
 
   // Getters - cached, not meant to be exported
@@ -59,19 +58,19 @@ export default class BackgroundImage extends VuexModule {
   fromHTMLImageElement (image: HTMLImageElement) {
     this.image = image
   }
-  // @Mutation
-  // setNotReady () {
-  //   this.isReady = false
-  // }
-  // @Mutation
-  // setReady () {
-  //   this.isReady = true
-  // }
+  @Mutation
+  setNotReady () {
+    this.isReady = false
+  }
+  @Mutation
+  setReady () {
+    this.isReady = true
+  }
 
   @Action
   async fromImageSrc (imageSrc: ImageSrc) {
-    // this.setNotReady()
+    this.setNotReady()
     this.fromHTMLImageElement(await fetchImage(imageSrc))
-    // this.setReady()
+    this.setReady()
   }
 }
