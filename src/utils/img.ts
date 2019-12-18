@@ -14,7 +14,9 @@ export async function fetchImage ({ src, srcset }: ImageSrc): Promise<HTMLImageE
   })
 }
 
-export const imgToBase64 = (img: HTMLImageElement, format: string = 'png'): string => {
+export const imgToBase64 = (img: HTMLImageElement, format: string = 'jpeg'): string => {
+  // Note: by default, the base64 will use JPEG format, with 0.92 image quality value
+  // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL
   const canvas: HTMLCanvasElement = document.createElement('canvas')
   canvas.width = img.naturalWidth
   canvas.height = img.naturalHeight
