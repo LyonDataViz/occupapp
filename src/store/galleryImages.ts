@@ -3,7 +3,7 @@ import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import { ImageSrc } from '@/utils/types.ts'
 import { imageSrcs } from '@/utils/severo_pictures.ts'
-import { fetchImage, imgToBase64 } from '@/utils/img.ts'
+import { getImageUrl } from '@/utils/img.ts'
 
 const arrayToMap = (arr: ImageSrc[]): Map<string, ImageSrc> => {
   return new Map(arr.map(s => [s.src, s]))
@@ -77,10 +77,7 @@ export default class GalleryImages extends VuexModule {
   async appendFilesArray (files: File[]) {
     const list: ImageSrc[] = []
     for (const f of files) {
-      const url:string = window.URL.createObjectURL(f)
-      const imageSrc: ImageSrc = { src: url }
-      const img: HTMLImageElement = await fetchImage(imageSrc)
-      const base64Str: string = imgToBase64(img)
+      const base64Str = await getImageUrl(f)
       if (base64Str !== '') {
         list.push({ src: base64Str })
       }
