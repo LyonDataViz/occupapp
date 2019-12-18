@@ -119,6 +119,7 @@ export default class Gallery extends Vue {
   }
   set selected (idx: number) {
     composition.fromSrc(this.srcsArray[idx])
+    this.$emit('selected')
   }
   addFiles (files: File[]) {
     galleryImages.appendFilesArray(files)

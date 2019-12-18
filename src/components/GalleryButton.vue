@@ -16,7 +16,7 @@
         <span class="headline">Background Image</span>
       </v-card-title>
       <v-card-text>
-        <Gallery />
+        <Gallery @selected="close" />
       </v-card-text>
 
       <v-divider class="mx-4" />
@@ -34,7 +34,7 @@
         <v-btn
           color="blue darken-1"
           text
-          @click="dialog = false"
+          @click="close"
         >
           Close
         </v-btn>
@@ -71,6 +71,10 @@ export default class GalleryButton extends Vue {
   }
   set isColored (value: boolean) {
     settings.setShowImageColors(value)
+  }
+
+  close () {
+    this.dialog = false
   }
 }
 
