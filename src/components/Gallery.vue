@@ -47,7 +47,20 @@
       </v-row>
     </v-item-group>
 
-    <ImageUploaderButton @update:files="addFiles($event)" />
+    <!-- See for details on this element: https://stackoverflow.com/a/42654487/7351594 -->
+    <v-btn
+      text
+      tag="label"
+    >
+      <v-icon>mdi-paperclip</v-icon> Add images
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        hidden
+        @change="addFiles($event.target.files)"
+      >
+    </v-btn>
   </v-container>
 </template>
 
@@ -109,6 +122,7 @@ export default class Gallery extends Vue {
   }
   addFiles (files: File[]) {
     galleryImages.appendFilesArray(files)
+    files = []
   }
 }
 </script>
