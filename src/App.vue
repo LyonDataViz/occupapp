@@ -54,7 +54,7 @@ import Infos from '@/components/Infos.vue'
 export default Vue.extend({
   name: 'App',
   data: () => ({
-    drawer: true
+    drawer: false
   }),
   components: {
     PointsList,
