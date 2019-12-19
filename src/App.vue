@@ -17,9 +17,23 @@
             mdi-exit-to-app
           </v-icon>
         </v-btn>
-        <v-toolbar-title>Points</v-toolbar-title>
+        <v-toolbar-title>{{ viewTitle }}</v-toolbar-title>
 
         <v-spacer />
+        <v-btn
+          icon
+          @click="view = 'images'"
+          :disabled="view === 'images'"
+        >
+          <v-icon>mdi-image</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click="view = 'points'"
+          :disabled="view === 'points'"
+        >
+          <v-icon>mdi-map-marker-circle</v-icon>
+        </v-btn>
         <v-btn
           icon
           @click="toggleFullscreen()"
@@ -29,7 +43,10 @@
         <v-app-bar-nav-icon @click="drawer = !drawer" />
       </v-toolbar>
 
-      <PointsList />
+      <v-container pa-2>
+        <PointsList v-if="view === 'points'" />
+        <ImagesPanel v-if="view === 'images'" />
+      </v-container>
 
       <template v-slot:append>
         <v-divider />
@@ -50,7 +67,6 @@
       </a>
       <v-spacer />
 
-      <GalleryButton />
       <v-app-bar-nav-icon @click="drawer = !drawer" />
     </v-app-bar>
 
@@ -67,7 +83,7 @@
 import Vue from 'vue'
 
 import PointsList from '@/components/PointsList.vue'
-import GalleryButton from '@/components/GalleryButton.vue'
+import ImagesPanel from '@/components/ImagesPanel.vue'
 import Infos from '@/components/Infos.vue'
 import Home from '@/components/Home.vue'
 
@@ -77,7 +93,8 @@ export default Vue.extend({
     small: 600,
     big: 6000,
     barWidth: 600,
-    drawer: false
+    drawer: false,
+    view: 'points'
   }),
   mounted: function () {
     this.small = this.$vuetify.breakpoint.thresholds.md * 0.5
@@ -85,9 +102,18 @@ export default Vue.extend({
   },
   components: {
     PointsList,
-    GalleryButton,
+    ImagesPanel,
     Infos,
     Home
+  },
+  computed: {
+    viewTitle: function () {
+      const titles = {
+        points: 'Points',
+        images: 'Background Image'
+      }
+      return this.view in titles ? titles[this.view] : ''
+    }
   },
   methods: {
     toggleFullscreen: function () {
