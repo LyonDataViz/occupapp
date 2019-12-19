@@ -37,6 +37,6 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component
-export default class Gallery extends Vue {
+export default class FilterShadow8 extends Vue {
 }
 </script>

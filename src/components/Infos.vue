@@ -35,7 +35,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component
-export default class Gallery extends Vue {
+export default class Infos extends Vue {
   get appVersion (): string {
     return process.env.VERSION || 'undefined'
   }
