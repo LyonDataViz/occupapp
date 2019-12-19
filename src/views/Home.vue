@@ -8,62 +8,60 @@
     <v-row
       no-gutters
       justify="center"
+      class="position-relative"
     >
-      <div id="image-wrapper">
-        <v-banner
-          class="floating"
-          single-line
-          elevation="8"
-          transition="slide-y-transition"
-          v-show="showBanner"
-        >
-          {{ selectedPointsText }}
-          <template v-slot:actions>
-            <v-btn
-              text
-              color="secondary"
-              @click="cancelSelection"
-            >
-              Dismiss
-            </v-btn>
-            <v-btn
-              text
-              color="error"
-              @click="deleteSelection"
-            >
-              Delete
-            </v-btn>
-          </template>
-        </v-banner>
-
-        <Background
-          ref="background"
-          class="below"
+      <SizeGetter
+        :width-getter="widthGetter"
+        :height-getter="heightGetter"
+        v-slot="{width, height, devicePixelRatio}"
+      >
+        <Main
           :width="width"
           :height="height"
           :device-pixel-ratio="devicePixelRatio"
         />
-        <Handles
-          class="above"
-          :width="width"
-          :height="height"
-        />
-        <v-btn
-          class="button"
-          key="1"
-          color="amber"
-          fab
-          large
-          dark
-          bottom
-          left
-          @click="addPoint"
-        >
-          <v-icon color="black">
-            {{ buttonIcon }}
-          </v-icon>
-        </v-btn>
-      </div>
+      </SizeGetter>
+      <v-banner
+        class="floating"
+        single-line
+        elevation="8"
+        transition="slide-y-transition"
+        v-show="showBanner"
+      >
+        {{ selectedPointsText }}
+        <template v-slot:actions>
+          <v-btn
+            text
+            color="secondary"
+            @click="cancelSelection"
+          >
+            Dismiss
+          </v-btn>
+          <v-btn
+            text
+            color="error"
+            @click="deleteSelection"
+          >
+            Delete
+          </v-btn>
+        </template>
+      </v-banner>
+
+      <v-btn
+        class="button"
+        key="1"
+        color="amber"
+        fab
+        large
+        dark
+        bottom
+        left
+        @click="addPoint"
+      >
+        <v-icon color="black">
+          {{ buttonIcon }}
+        </v-icon>
+      </v-btn>
     </v-row>
   </v-container>
 </template>
@@ -74,14 +72,14 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { mdiPlus } from '@mdi/js'
 
+import Main from '@/components/Main.vue'
+import SizeGetter from '@/components/SizeGetter.vue'
+
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
 import Composition from '@/store/current/composition.ts'
 import PointsSelection from '@/store/current/pointsSelection.ts'
 import Points from '@/store/current/points.ts'
-
-import Background from '@/components/Background.vue'
-import Handles from '@/components/Handles.vue'
 
 const backgroundImage = getModule(BackgroundImage)
 const categories = getModule(Categories)
@@ -91,16 +89,11 @@ const points = getModule(Points)
 
 @Component({
   components: {
-    Background,
-    Handles
+    Main,
+    SizeGetter
   }
 })
 export default class Home extends Vue {
-  // initial data
-  width = 300 // in CSS px
-  height = 150 // in CSS px
-  devicePixelRatio = 1
-
   // annotate refs type
   $refs!: {
     container: HTMLElement
@@ -110,51 +103,16 @@ export default class Home extends Vue {
   mounted () {
     // Init the composition
     composition.initWithSomething()
-    // Then launch the size check loop
-    this.checkLoop()
   }
 
-  // computed
-  get aspectRatio () {
-    return backgroundImage.aspectRatio
-  }
-  get container (): HTMLElement {
-    return this.$refs.container
-  }
   get buttonIcon (): string {
     return mdiPlus
   }
-
-  // methods
-  checkDpr () {
-    if (this.devicePixelRatio !== window.devicePixelRatio) {
-      this.devicePixelRatio = window.devicePixelRatio
-      return true
-    }
-    return false
+  get widthGetter (): () => number {
+    return () => this.$refs.container ? this.$refs.container.clientWidth : 300
   }
-  checkSize () {
-    // Adapted from https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
-    let width = this.container.clientWidth
-    let height = this.container.clientHeight
-    if (width > height * this.aspectRatio) {
-      width = Math.floor(height * this.aspectRatio)
-    } else {
-      height = Math.floor(width / this.aspectRatio)
-    }
-    if (this.width !== width || this.height !== height) {
-      this.width = width
-      this.height = height
-      return true
-    }
-    return false
-  }
-  checkLoop () {
-    // Beware: this loop is called at every animation frame. Don't overload it
-    this.checkSize()
-    // Note: we might check the devicePixelRatio value (checkDpr) at a lower rate if it affects the performance
-    this.checkDpr()
-    requestAnimationFrame(this.checkLoop)
+  get heightGetter (): () => number {
+    return () => this.$refs.container ? this.$refs.container.clientHeight : 150
   }
 
   get selectedPointsText (): string {
@@ -179,15 +137,8 @@ export default class Home extends Vue {
 </script>
 
 <style lang="sass">
-div#image-wrapper
+.position-relative
   position: relative
-  .below
-    display: block
-  .above
-    position: absolute
-    top: 0
-    left: 0
-    z-index: 2
   .floating
     position: absolute
     top: 20px
