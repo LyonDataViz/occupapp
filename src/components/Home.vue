@@ -16,7 +16,7 @@
         justify="center"
         class="height-100"
       >
-        <Main
+        <MainPanel
           :width-getter="widthGetter"
           :height-getter="heightGetter"
         />
@@ -73,7 +73,7 @@ import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
 import { mdiPlus } from '@mdi/js'
 
-import Main from '@/components/Main.vue'
+import MainPanel from '@/components/MainPanel.vue'
 
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
@@ -89,7 +89,7 @@ const points = getModule(Points)
 
 @Component({
   components: {
-    Main
+    MainPanel
   }
 })
 export default class Home extends Vue {
