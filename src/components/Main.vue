@@ -19,13 +19,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Component from 'vue-class-component'
+import Component, { mixins } from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
 import { getModule } from 'vuex-module-decorators'
 
 import Background from '@/components/Background.vue'
 import Handles from '@/components/Handles.vue'
+import SizeGetter from '@/mixins/SizeGetter.ts'
 
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 const backgroundImage = getModule(BackgroundImage)
@@ -36,12 +37,7 @@ const backgroundImage = getModule(BackgroundImage)
     Handles
   }
 })
-export default class Home extends Vue {
-  // props
-  @Prop({ default: 300 }) readonly width!: number
-  @Prop({ default: 150 }) readonly height!: number
-  @Prop({ default: 1 }) readonly devicePixelRatio!: number
-
+export default class Home extends mixins(SizeGetter) {
   get size (): {width: number, height: number} {
     let width = this.width
     let height = this.height

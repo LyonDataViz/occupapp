@@ -1,14 +1,3 @@
-<template>
-  <div class="size-getter">
-    <slot
-      :width="width"
-      :height="height"
-      :devicePixelRatio="devicePixelRatio"
-    />
-  </div>
-</template>
-
-<script lang="ts">
 /*
  * It's an alternative to https://github.com/David-Desmaisons/Vue.resize
  * and https://github.com/Akryum/vue-resize, based on a loop as recommended
@@ -18,6 +7,8 @@
  *       changes in devicePixelRatio value, for example. All props are optional.
  * Cons: maybe it's slower? Note that it might depend on my implementation (see
  *       TODOs below)
+ *
+ * It's a mixin - see https://github.com/vuejs/vue-class-component#using-mixins
  */
 
 import Vue from 'vue'
@@ -87,7 +78,3 @@ export default class SizeGetter extends Vue {
     requestAnimationFrame(this.checkLoop)
   }
 }
-</script>
-
-<style lang="sass">
-</style>

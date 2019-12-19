@@ -3,65 +3,70 @@
     fluid
     fill-height
     pa-0
-    ref="container"
   >
     <v-row
       no-gutters
-      justify="center"
-      class="position-relative"
+      class="height-100"
     >
-      <SizeGetter
-        :width-getter="widthGetter"
-        :height-getter="heightGetter"
-        v-slot="{width, height, devicePixelRatio}"
-      >
-        <Main
-          :width="width"
-          :height="height"
-          :device-pixel-ratio="devicePixelRatio"
-        />
-      </SizeGetter>
-      <v-banner
-        class="floating"
-        single-line
-        elevation="8"
-        transition="slide-y-transition"
-        v-show="showBanner"
-      >
-        {{ selectedPointsText }}
-        <template v-slot:actions>
-          <v-btn
-            text
-            color="secondary"
-            @click="cancelSelection"
-          >
-            Dismiss
-          </v-btn>
-          <v-btn
-            text
-            color="error"
-            @click="deleteSelection"
-          >
-            Delete
-          </v-btn>
-        </template>
-      </v-banner>
-
-      <v-btn
-        class="button"
+      <v-col
         key="1"
-        color="amber"
-        fab
-        large
-        dark
-        bottom
-        left
-        @click="addPoint"
+        cols="12"
+        class="position-relative"
+        ref="firstcol"
       >
-        <v-icon color="black">
-          {{ buttonIcon }}
-        </v-icon>
-      </v-btn>
+        <v-row
+          no-gutters
+          align="center"
+          justify="center"
+          class="height-100"
+        >
+          <Main
+            :width-getter="widthGetter"
+            :height-getter="heightGetter"
+          />
+        </v-row>
+        <v-banner
+          class="floating"
+          single-line
+          elevation="8"
+          transition="slide-y-transition"
+          v-show="showBanner"
+        >
+          {{ selectedPointsText }}
+          <template v-slot:actions>
+            <v-btn
+              text
+              color="secondary"
+              @click="cancelSelection"
+            >
+              Dismiss
+            </v-btn>
+            <v-btn
+              text
+              color="error"
+              @click="deleteSelection"
+            >
+              Delete
+            </v-btn>
+          </template>
+        </v-banner>
+
+        <v-btn
+          class="button"
+          key="1"
+          color="amber"
+          fab
+          large
+          dark
+          bottom
+          left
+          @click="addPoint"
+        >
+          <v-icon color="black">
+            {{ buttonIcon }}
+          </v-icon>
+        </v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -73,7 +78,6 @@ import { getModule } from 'vuex-module-decorators'
 import { mdiPlus } from '@mdi/js'
 
 import Main from '@/components/Main.vue'
-import SizeGetter from '@/components/SizeGetter.vue'
 
 import BackgroundImage from '@/store/current/backgroundImage.ts'
 import Categories from '@/store/current/categories.ts'
@@ -89,14 +93,13 @@ const points = getModule(Points)
 
 @Component({
   components: {
-    Main,
-    SizeGetter
+    Main
   }
 })
 export default class Home extends Vue {
   // annotate refs type
   $refs!: {
-    container: HTMLElement
+    firstcol: HTMLElement
   }
 
   // lifecycle hook
@@ -109,10 +112,10 @@ export default class Home extends Vue {
     return mdiPlus
   }
   get widthGetter (): () => number {
-    return () => this.$refs.container ? this.$refs.container.clientWidth : 300
+    return () => this.$refs.firstcol ? this.$refs.firstcol.clientWidth : 300
   }
   get heightGetter (): () => number {
-    return () => this.$refs.container ? this.$refs.container.clientHeight : 150
+    return () => this.$refs.firstcol ? this.$refs.firstcol.clientHeight : 150
   }
 
   get selectedPointsText (): string {
@@ -150,4 +153,6 @@ export default class Home extends Vue {
     bottom: 30px
     right: 30px
     z-index: 3
+.height-100
+  height: 100%
 </style>
