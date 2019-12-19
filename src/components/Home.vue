@@ -3,72 +3,68 @@
     fluid
     fill-height
     pa-0
+    ref="container"
   >
     <v-row
       no-gutters
-      class="height-100"
+      class="height-100 position-relative"
+      ref="firstcol"
     >
-      <v-col
-        key="1"
-        cols="12"
-        class="position-relative"
-        ref="firstcol"
+      <v-row
+        no-gutters
+        align="center"
+        justify="center"
+        class="height-100"
       >
-        <v-row
-          no-gutters
-          align="center"
-          justify="center"
-          class="height-100"
-        >
-          <Main
-            :width-getter="widthGetter"
-            :height-getter="heightGetter"
-          />
-        </v-row>
-        <v-banner
-          class="floating"
-          single-line
-          elevation="8"
-          transition="slide-y-transition"
-          v-show="showBanner"
-        >
-          {{ selectedPointsText }}
-          <template v-slot:actions>
-            <v-btn
-              text
-              color="secondary"
-              @click="cancelSelection"
-            >
-              Dismiss
-            </v-btn>
-            <v-btn
-              text
-              color="error"
-              @click="deleteSelection"
-            >
-              Delete
-            </v-btn>
-          </template>
-        </v-banner>
+        <Main
+          :width-getter="widthGetter"
+          :height-getter="heightGetter"
+        />
+      </v-row>
+      <v-banner
+        class="floating"
+        single-line
+        elevation="8"
+        transition="slide-y-transition"
+        v-show="showBanner"
+      >
+        {{ selectedPointsText }}
+        <template v-slot:actions>
+          <v-btn
+            text
+            color="secondary"
+            @click="cancelSelection"
+          >
+            Dismiss
+          </v-btn>
+          <v-btn
+            text
+            color="error"
+            @click="deleteSelection"
+          >
+            Delete
+          </v-btn>
+        </template>
+      </v-banner>
 
-        <v-btn
-          class="button"
-          key="1"
-          color="amber"
-          fab
-          large
-          dark
-          bottom
-          left
-          @click="addPoint"
-        >
-          <v-icon color="black">
-            {{ buttonIcon }}
-          </v-icon>
-        </v-btn>
-      </v-col>
+      <v-btn
+        class="button"
+        key="1"
+        color="amber"
+        fab
+        large
+        dark
+        bottom
+        left
+        @click="addPoint"
+      >
+        <v-icon color="black">
+          {{ buttonIcon }}
+        </v-icon>
+      </v-btn>
     </v-row>
   </v-container>
+  <!-- </div> -->
 </template>
 
 <script lang="ts">
@@ -99,6 +95,7 @@ const points = getModule(Points)
 export default class Home extends Vue {
   // annotate refs type
   $refs!: {
+    container: HTMLElement,
     firstcol: HTMLElement
   }
 
@@ -115,7 +112,7 @@ export default class Home extends Vue {
     return () => this.$refs.firstcol ? this.$refs.firstcol.clientWidth : 300
   }
   get heightGetter (): () => number {
-    return () => this.$refs.firstcol ? this.$refs.firstcol.clientHeight : 150
+    return () => this.$refs.container ? this.$refs.container.clientHeight : 150
   }
 
   get selectedPointsText (): string {

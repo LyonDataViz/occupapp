@@ -1,8 +1,5 @@
 <template>
   <div>
-    <v-subheader>
-      Points
-    </v-subheader>
     <v-list dense>
       <v-list-item-group
         v-model="pointsIdxSelectionArray"
