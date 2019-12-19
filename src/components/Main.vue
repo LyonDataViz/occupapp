@@ -37,7 +37,7 @@ const backgroundImage = getModule(BackgroundImage)
     Handles
   }
 })
-export default class Home extends mixins(SizeGetter) {
+export default class Main extends mixins(SizeGetter) {
   get size (): {width: number, height: number} {
     let width = this.width
     let height = this.height
