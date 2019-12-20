@@ -5,7 +5,7 @@
         href="https://github.com/LyonDataViz/occupapp/issues/new"
       >issue</a>.
     </p>
-    <p class="credits">
+    <p class="credits ma-0">
       <img
         src="/liris.png"
         height
@@ -19,9 +19,8 @@
 </template>
 
 <style scoped>
-.credits {
+p {
   text-align: center;
-  margin: 0;
 }
 img {
   vertical-align: middle;
