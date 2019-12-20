@@ -44,6 +44,7 @@
         <v-btn
           icon
           @click="toggleFullscreen()"
+          v-if="$vuetify.breakpoint.smAndUp"
         >
           <v-icon>mdi-fullscreen</v-icon>
         </v-btn>
