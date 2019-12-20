@@ -24,7 +24,8 @@ https://occupapp.now.sh/
   watch for changes in index.html and favicon.ico, due to
   https://github.com/vladshcherbin/rollup-plugin-copy/issues/5
 
-- deploy to now.sh:
+- deploy to now.sh (it should not be necessary to launch it manually, every push
+  to GitHub will deploy the application with a dedicated URL):
 
   ```
   npm run deploy

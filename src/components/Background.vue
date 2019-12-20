@@ -15,6 +15,14 @@
       :style="canvasStyle"
       v-show="isCanvasVisible"
     />
+    <ImageCacheCanvas
+      :width="width"
+      :height="height"
+      :device-pixel-ratio="devicePixelRatio"
+      :image="image"
+      :is-colored="isColored"
+      @update:canvas="updateCache"
+    />
   </div>
 </template>
 
@@ -25,24 +33,37 @@ import { getModule } from 'vuex-module-decorators'
 import { Prop, Watch } from 'vue-property-decorator'
 import { Delaunay } from 'd3-delaunay'
 import * as d3 from 'd3'
+import { Point } from '@/utils/types.ts'
 
-import * as pictures from '@/utils/pictures.ts'
-import Compositions, { Point } from '@/store/compositions.ts'
+import ImageCacheCanvas from '@/components/ImageCacheCanvas.vue'
 
-const compositions = getModule(Compositions)
+import Settings from '@/store/settings.ts'
+import BackgroundImage from '@/store/current/backgroundImage.ts'
+import Categories from '@/store/current/categories.ts'
+import Points from '@/store/current/points.ts'
+import PointsMetrics from '@/store/current/pointsMetrics.ts'
 
-@Component
-export default class Handles extends Vue {
+const settings = getModule(Settings)
+const backgroundImage = getModule(BackgroundImage)
+const categories = getModule(Categories)
+const points = getModule(Points)
+const pointsMetrics = getModule(PointsMetrics)
+
+@Component({
+  components: {
+    ImageCacheCanvas
+  }
+})
+export default class Background extends Vue {
   // props
   @Prop({ default: 300 }) readonly width!: number
   @Prop({ default: 150 }) readonly height!: number
   @Prop({ default: 1 }) readonly devicePixelRatio!: number
 
   // local data
-  debug = false
-  image: HTMLImageElement = new Image()
+  imageCacheCanvas: HTMLCanvasElement | undefined = undefined
+  imageCacheCanvasChangeTracker: number = 1
   debounceTimer: number = 0
-  isImageLoading: boolean = true
   isCanvasRendering: boolean = false
 
   // annotate refs type
@@ -51,6 +72,9 @@ export default class Handles extends Vue {
   }
 
   // computed
+  get image (): HTMLImageElement {
+    return backgroundImage.image
+  }
   get canvas (): HTMLCanvasElement {
     return this.$refs.imagecanvas
   }
@@ -63,6 +87,9 @@ export default class Handles extends Vue {
   get canvasHeight (): number {
     return this.height * this.devicePixelRatio
   }
+  get totalArea (): number {
+    return this.width * this.height
+  }
   get canvasStyle (): {width: string, height: string} {
     return {
       width: `${this.width}px`,
@@ -72,15 +99,12 @@ export default class Handles extends Vue {
   get wrapperStyle (): {width: string, height: string} {
     return { ...this.canvasStyle }
   }
-  get pictureId (): number {
-    return compositions.currentPictureId
+  get pointsArray (): Point[] {
+    return points.asArray
   }
-  get points (): Point[] {
-    return compositions.current.points
-  }
-  // TODO check if there is a best practice for use of 'private' keyword,a nd if we follow it
+  // TODO check if there is a best practice for use of 'private' keyword, and if we follow it
   private get isPlaceholderVisible (): boolean {
-    return this.isImageLoading
+    return !backgroundImage.isReady
   }
   private get isCanvasVisible (): boolean {
     return !this.isPlaceholderVisible
@@ -99,24 +123,21 @@ export default class Handles extends Vue {
   }
   get voronoi () {
     return Delaunay.from(
-      this.points,
+      this.pointsArray,
       (d: Point): number => this.x(d.x),
       (d: Point): number => this.y(d.y)
-    ).voronoi([0, 0, this.canvasWidth, this.canvasHeight])
+    ).voronoi([0, 0, this.width, this.height])
   }
-  get color () {
-    const colors =
-      [d3.rgb(255, 195, 8), d3.rgb(172, 159, 253), d3.rgb(181, 246, 66), d3.rgb(239, 106, 222)]
-
-    // Note .hex() will be obsolete in d3-color, see https://github.com/d3/d3-color#color_formatHex and https://www.npmjs.com/package/@types/d3
-    return (i: number): string => colors[i % 4].hex()
-  }
-  // lifecycle hook
-  mounted () {
-    this.fetchImage(this.pictureId)
+  get isColored (): boolean {
+    return settings.showImageColors
   }
 
   // methods
+  updateCache (canvas: HTMLCanvasElement) {
+    this.imageCacheCanvas = canvas
+    this.imageCacheCanvasChangeTracker += 1
+  }
+
   drawCanvas (): void {
     if (this.ctx === null) { return }
     // Redraw & reposition content
@@ -124,25 +145,22 @@ export default class Handles extends Vue {
     this.ctx.clearRect(0, 0, this.width, this.height)
     // Note: if image "srcset" is set (responsive image), the most adequate image size is used here
     // TODO confirm above comment
-    this.ctx.drawImage(this.image, 0, 0, this.width, this.height)
-    this.drawVoronoi(this.ctx)
-    if (this.debug) {
-      const resizeText = 'Canvas width: ' + this.canvas.width + 'px' + ' - image: ' + pictures.getName(this.pictureId)
-      this.ctx.textAlign = 'center'
-      this.ctx.fillStyle = '#000'
-      this.ctx.fillText(resizeText, this.width / 2, this.height / 2)
+    if (this.imageCacheCanvas !== undefined) {
+      this.ctx.drawImage(this.imageCacheCanvas, 0, 0, this.width, this.height)
     }
+
+    this.drawVoronoi(this.ctx)
   }
 
   drawVoronoi (context: CanvasRenderingContext2D): void {
     context.save()
     const v = this.voronoi
     let i = 0
-    for (const d of this.points) {
+    for (const point of this.pointsArray) {
       context.beginPath()
       v.renderCell(i++, context)
-      context.globalAlpha = 0.2
-      context.fillStyle = this.color(i)
+      context.globalAlpha = 0.5
+      context.fillStyle = categories.getColor(point.categoryId)
       context.fill()
 
       context.globalAlpha = 1
@@ -153,38 +171,42 @@ export default class Handles extends Vue {
     context.restore()
   }
 
-  async fetchImage (pictureId: number) {
-    this.isImageLoading = true
-    this.image = await pictures.fetchImage(pictureId)
-    this.isImageLoading = false
+  updateAreas (): void {
+    let i = 0
+    for (const point of this.pointsArray) {
+      const polygon: [number, number][] = this.voronoi.cellPolygon(i++).map(
+        // this is only to adjust a TypeScript mismatch between d3-delaunay and
+        // d3-polygon
+        // See https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/d3-delaunay/index.d.ts#L159
+        // and https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/d3-polygon/index.d.ts
+        p => [p[0], p[1]]
+      )
+      const area = Math.abs(d3.polygonArea(polygon)) / this.totalArea
+      pointsMetrics.setArea({ pointId: point.id, area })
+    }
   }
 
   // watchers
-  @Watch('pictureId')
-  onPictureIdChange (pictureId: number, oldPictureId: number) {
-    this.fetchImage(pictureId)
-  }
 
-  @Watch('image')
+  @Watch('imageCacheCanvasChangeTracker')
   @Watch('width')
   @Watch('height')
   @Watch('devicePixelRatio')
-  @Watch('points', { deep: true })
-  onSomethingChange (val: number | HTMLImageElement, oldVal: number | HTMLImageElement) {
+  @Watch('pointsArray', { deep: true })
+  onSomethingChange () {
     // See https://stackoverflow.com/a/37588776/7351594
     this.isCanvasRendering = true
     clearTimeout(this.debounceTimer)
-    this.debounceTimer = setTimeout(() => {
+    this.debounceTimer = window.setTimeout(() => {
       // Note how we use an arrow function to get access to the "this" object
       // See https://stackoverflow.com/a/38737108/7351594
 
-      if (!this.isImageLoading) {
-        // Always change the size before rendering (because size change cleans the canvas)
-        this.canvas.width = this.canvasWidth
-        this.canvas.height = this.canvasHeight
-        this.drawCanvas()
-        this.isCanvasRendering = false
-      }
+      // Always change the size before rendering (because size change cleans the canvas)
+      this.canvas.width = this.canvasWidth
+      this.canvas.height = this.canvasHeight
+      this.drawCanvas()
+      this.updateAreas()
+      this.isCanvasRendering = false
     }, 10)
   }
 }

@@ -1,52 +1,85 @@
 <template>
-  <v-container class="pa-0">
+  <v-container>
     <v-item-group
       v-model="selected"
       mandatory
-      class="flex-columns"
     >
-      <v-item
-        v-for="(src,i) in srcs"
-        :key="i"
-        v-slot:default="{ active, toggle }"
+      <v-row
+        dense
+        class="images-row"
       >
-        <v-img
-          :src="src"
-          class="grey lighten-2 text-right pa-2"
-          width="100%"
-          aspect-ratio="1"
-          @click="toggle"
+        <v-col
+          v-for="(imageSrc,i) in imageSrcsArray"
+          :key="i"
+          cols="auto"
         >
-          <v-overlay
-            absolute
+          <v-item
+            v-slot:default="{ active, toggle }"
           >
-            <v-btn
-              icon
-              dark
-              class="select-image"
+            <v-img
+              :src="imageSrc.thumbnailSrc || imageSrc.src"
+              :srcset="imageSrc.srcset"
+              class="grey lighten-2 text-right pa-2"
+              width="64px"
+              height="64px"
+              aspect-ratio="1"
+              @click="toggle"
             >
-              <v-icon
-                large
-                :class="{active}"
+              <v-overlay
+                absolute
               >
-                mdi-check
-              </v-icon>
-            </v-btn>
-          </v-overlay>
-        </v-img>
-      </v-item>
+                <v-btn
+                  icon
+                  dark
+                  class="select-image"
+                >
+                  <v-icon
+                    large
+                    :class="{active}"
+                  >
+                    mdi-check
+                  </v-icon>
+                </v-btn>
+              </v-overlay>
+            </v-img>
+          </v-item>
+        </v-col>
+      </v-row>
     </v-item-group>
+
+    <!-- See for details on this element: https://stackoverflow.com/a/42654487/7351594 -->
+    <v-btn
+      text
+      tag="label"
+    >
+      <v-icon>mdi-paperclip</v-icon> Add images
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        hidden
+        @change="addFiles($event.target.files)"
+      >
+    </v-btn>
   </v-container>
 </template>
 
 <style scoped>
-.v-btn.select-image .v-icon {
-  color: transparent
+.v-subheader {
+  text-transform: uppercase;
 }
-.v-btn.select-image .v-icon.active,
-.v-image:hover .v-btn.select-image .v-icon,
-.v-btn.select-image:focus-within .v-icon {
-  color: currentColor
+.v-overlay {
+  opacity: 0
+}
+.v-item--active .v-overlay,
+.v-overlay:hover,
+.v-overlay:focus,
+.v-overlay:active {
+  opacity: 1;
+}
+.images-row {
+  max-height: 250px;
+  overflow-y: auto;
 }
 </style>
 
@@ -54,23 +87,43 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
+import { ImageSrc } from '@/utils/types.ts'
 
-import Compositions from '@/store/compositions.ts'
-import * as pictures from '@/utils/pictures.ts'
+import ImageUploaderButton from '@/components/ImageUploaderButton.vue'
 
-const compositions = getModule(Compositions)
+import BackgroundImage from '@/store/current/backgroundImage.ts'
+import Composition from '@/store/current/composition.ts'
+import GalleryImages from '@/store/galleryImages.ts'
 
-@Component
+const backgroundImage = getModule(BackgroundImage)
+const composition = getModule(Composition)
+const galleryImages = getModule(GalleryImages)
+
+@Component({
+  components: {
+    ImageUploaderButton
+  }
+})
 export default class Gallery extends Vue {
-  get srcs (): string[] {
-    // TODO improve safety of picture identification. Currently it only depends on the idx in pictures.thumbnailSrcs array
-    return pictures.thumbnailSrcs
+  get imageSrcs (): Map<string, ImageSrc> {
+    return galleryImages.asMap
+  }
+  get imageSrcsArray (): ImageSrc[] {
+    return [...this.imageSrcs.values()]
+  }
+  get srcsArray (): string[] {
+    return [...this.imageSrcs.keys()]
   }
   get selected (): number {
-    return compositions.currentPictureId
+    return this.srcsArray.indexOf(backgroundImage.src)
   }
-  set selected (pictureId: number) {
-    compositions.setCurrentByPictureId(pictureId)
+  set selected (idx: number) {
+    composition.fromSrc(this.srcsArray[idx])
+    this.$emit('selected')
+  }
+  addFiles (files: File[]) {
+    galleryImages.appendFilesArray(files)
+    files = []
   }
 }
 </script>
