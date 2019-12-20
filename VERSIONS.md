@@ -6,6 +6,13 @@ of [Occupapp](https://github.com/LyonDataViz/occupapp) are listed here.
 *Note: the file is maintained manually. If it turns to be outdated, please
 [fill an issue](https://github.com/LyonDataViz/occupapp/issues).*
 
+## v1.2.0
+
+- [Online demo](https://occupapp-khxo9ktm7.now.sh/)
+- [Changelog](https://github.com/LyonDataViz/occupapp/blob/master/CHANGELOG.md#120-2019-12-20)
+- [Milestone](https://github.com/LyonDataViz/occupapp/milestone/4?closed=1)
+- [Download](https://github.com/LyonDataViz/occupapp/releases/tag/v1.2.0)
+
 ## v1.1.0
 
 - [Online demo](https://occupapp-qf17v5yfl.now.sh)
