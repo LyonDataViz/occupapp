@@ -22,17 +22,24 @@
         <v-spacer />
         <v-btn
           icon
-          @click="view = 'images'"
-          :disabled="view === 'images'"
-        >
-          <v-icon>mdi-image</v-icon>
-        </v-btn>
-        <v-btn
-          icon
           @click="view = 'points'"
           :disabled="view === 'points'"
         >
           <v-icon>mdi-map-marker-circle</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click="view = 'tables'"
+          :disabled="view === 'tables'"
+        >
+          <v-icon>mdi-table-large</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click="view = 'images'"
+          :disabled="view === 'images'"
+        >
+          <v-icon>mdi-image</v-icon>
         </v-btn>
         <v-btn
           icon
@@ -46,6 +53,7 @@
       <v-container pa-2>
         <PointsList v-if="view === 'points'" />
         <ImagesPanel v-if="view === 'images'" />
+        <TablesPanel v-if="view === 'tables'" />
       </v-container>
 
       <template v-slot:append>
@@ -83,6 +91,7 @@
 import Vue from 'vue'
 
 import PointsList from '@/components/PointsList.vue'
+import TablesPanel from '@/components/TablesPanel.vue'
 import ImagesPanel from '@/components/ImagesPanel.vue'
 import Infos from '@/components/Infos.vue'
 import Home from '@/components/Home.vue'
@@ -102,17 +111,19 @@ export default Vue.extend({
   },
   components: {
     PointsList,
+    TablesPanel,
     ImagesPanel,
     Infos,
     Home
   },
   computed: {
     viewTitle: function () {
-      const titles = {
-        points: 'Points',
-        images: 'Background Image'
-      }
-      return this.view in titles ? titles[this.view] : ''
+      const titles: Map<string, string> = new Map([
+        ['tables', 'Data Tables'],
+        ['images', 'Background Image'],
+        ['points', 'Points']
+      ])
+      return titles.get(this.view) || ''
     }
   },
   methods: {
