@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/severo/occupapp/compare/v1.1.0...v1.2.0) (2019-12-20)
+
+
+### Features
+
+* add a bar representing point voronoi area ([c77e308](https://github.com/severo/occupapp/commit/c77e3085a1a125cbd4d327b5c85b94238f02b4a4))
+* add a picture (cuzco stones) to the examples ([7d90195](https://github.com/severo/occupapp/commit/7d901956f41ca823c9cc88c80b1efb3fa442cf3d))
+* add a switch between color and grayscale background image ([81fb9a8](https://github.com/severo/occupapp/commit/81fb9a8d9fe8b41260c6f4340e860bf70609505b))
+* add a Tables panel ([5b4053a](https://github.com/severo/occupapp/commit/5b4053a7e4573b73c5680d5ef4181cd1b0a51bde))
+* add information about feedback and credits ([4c58050](https://github.com/severo/occupapp/commit/4c5805022b76e1b1331b59658638f352e71c1bf9))
+* add number to points + in points handles ([e015233](https://github.com/severo/occupapp/commit/e015233ca21257d9aabb605c8b44ca7bdfa22a3e))
+* add point number in points list ([324ea7d](https://github.com/severo/occupapp/commit/324ea7dfcd8509f66bfb215d5273a93b332971d9))
+* add versions information in side bar ([a2e1d0b](https://github.com/severo/occupapp/commit/a2e1d0b2dfda05e94a92d92a820e0825a8101cfd))
+* assign a different category on each point creation ([52334e7](https://github.com/severo/occupapp/commit/52334e7eca16362b150516557784d865199716ba))
+* close the gallery when on image selection ([fc3c323](https://github.com/severo/occupapp/commit/fc3c32307346d851c4ba224ad95d92546c152aa1))
+* compute, store and display area of every point ([d676249](https://github.com/severo/occupapp/commit/d6762490a77759e5d5ccdf36fb3efce353d44424))
+* improve gallery style ([f1aeef3](https://github.com/severo/occupapp/commit/f1aeef3eac4c58f5f33ba1ce29351162f052ec44))
+* improve the upload button (a lot simpler and faster) ([ace3ebc](https://github.com/severo/occupapp/commit/ace3ebcd31863ad0e4e0417079031fbf5b29d527))
+* increase voronoi opacity to distinguish categories colors ([2c59bd2](https://github.com/severo/occupapp/commit/2c59bd2e0ff243476feb37e3a5c810b4c62a83a2))
+* limit height of the image list ([da18131](https://github.com/severo/occupapp/commit/da18131326c4821e0143a5c9b77915169147bf1e))
+* modify sidebar layout ([e19055c](https://github.com/severo/occupapp/commit/e19055c838ba6117a22d2106decb8d4b955b5509))
+* move Image selector to a popup from menu image icon ([8a5d473](https://github.com/severo/occupapp/commit/8a5d473e103a97d56ecef2690cfa0aa6d65bd9a4))
+* move the gallery to the side bar (instead of modal) ([f31e8d6](https://github.com/severo/occupapp/commit/f31e8d6ac2aa08c3e21e0d38eb195e2e3a4af4df))
+* persist one composition per image ([d44f93c](https://github.com/severo/occupapp/commit/d44f93cbea335e95b9a6c1e64d2b7e6831286510))
+* reduce base64 image size, using JPEG 0.92, instead of PNG ([b087ec3](https://github.com/severo/occupapp/commit/b087ec3db2ad964dffe5d47cc882f2ce4e5b0856))
+* select points from list or svg handles ([e3f03f0](https://github.com/severo/occupapp/commit/e3f03f088ac5a511953d12528b5a8ce856c29386))
+* show image colors by default ([26599e6](https://github.com/severo/occupapp/commit/26599e62319c32c9480e1b913126aaef84adc62a))
+* show list of agents, with select checkboxes ([c953bdb](https://github.com/severo/occupapp/commit/c953bdb2e619ab7ab7cf78119c03bad03f7809f5))
+* show Voronoi even if there is no background image ([be7933a](https://github.com/severo/occupapp/commit/be7933adaf13ca8606f1af9b70d3178102d87b53))
+* slight UI improvements (Add images button, card separation) ([b9198b7](https://github.com/severo/occupapp/commit/b9198b71438c633b33707929076539de9d8d9f35))
+* upload images (add to Gallery) ([09b0d13](https://github.com/severo/occupapp/commit/09b0d13ebe4224affa74a540d02004022336d8c4))
+
+
+### Bug Fixes
+
+* better name for the app ([1832056](https://github.com/severo/occupapp/commit/183205697d81a44a618b2c9e8c25230eb16aa285))
+* clamp x & y points coordinates to [0,100] domain ([d6c245c](https://github.com/severo/occupapp/commit/d6c245cb054dd096bc26c5705a978a3b616c9fa4)), closes [#36](https://github.com/severo/occupapp/issues/36)
+* close the navigation bar by default ([5eba3ff](https://github.com/severo/occupapp/commit/5eba3fffbe3f7d65ee8ee08a7e6e79ee7552d710)), closes [#42](https://github.com/severo/occupapp/issues/42)
+* downgrade typescript to 3.6.4 ([cb14419](https://github.com/severo/occupapp/commit/cb14419bf75b41ca5df19166d9a177931ab8659f))
+* fix component name ([f51707b](https://github.com/severo/occupapp/commit/f51707b192f4157c7cec92415e8c1d4f628aa3f4))
+* fix components names ([c9186d4](https://github.com/severo/occupapp/commit/c9186d482c17db900080ffa0385d24c2cbe4d639))
+* fix gallery title ([294f059](https://github.com/severo/occupapp/commit/294f0596e1598667dbf16dc1f9f70230916d77df))
+* fix Typescript error ([932f4a9](https://github.com/severo/occupapp/commit/932f4a9e521d9a5a0fac5a92fa156ab3c356816a))
+* hide the 'fullscreen' button on small screens ([ea28601](https://github.com/severo/occupapp/commit/ea28601d420818d252fc2050c0fabbf42180b855))
+* improve footer style ([bee10d0](https://github.com/severo/occupapp/commit/bee10d087dc928c992c19dc172bcc94d23594983))
+* improve reactivity on gray images ([71caefa](https://github.com/severo/occupapp/commit/71caefa364a17b4d40d8c8c1ccadae8e2f5c7f20))
+* increase the size of images a bit ([ddf1703](https://github.com/severo/occupapp/commit/ddf1703af96b50af2600ecc6a9ebb0881534380e))
+* remove field ([b3ce0e8](https://github.com/severo/occupapp/commit/b3ce0e8cdb5f4a9ec2948b3847c3922b14825b23))
+* remove point handle highlight once it has been selected ([434070a](https://github.com/severo/occupapp/commit/434070a3902e8f7a18b7d801046fccda9bd8609d))
+* remove useless case ([8a3357d](https://github.com/severo/occupapp/commit/8a3357db2dfc7fc8811d4e18994d87e7327fe949))
+* rename component Main to MainPanel ([1d82fa1](https://github.com/severo/occupapp/commit/1d82fa1fc20469f6fc0619d65a0c8d06e91be44a))
+* revert be7933ad partially ([598bb15](https://github.com/severo/occupapp/commit/598bb15d9c5ef409c18789a5249101b02f37b671))
+* rotate/mirror uploaded images according to EXIF ([4aadb8b](https://github.com/severo/occupapp/commit/4aadb8b5418ab49e6a32940225a79f889dcc8737)), closes [#45](https://github.com/severo/occupapp/issues/45)
+* store should be namespaced ([f736bfa](https://github.com/severo/occupapp/commit/f736bfad93e508dd280dcd1c16154dc6cf0d8b9b))
+* white text on selected handles ([53963a8](https://github.com/severo/occupapp/commit/53963a848b92ca0aea60fe7053f97b77353b104e))
+
 ## 1.1.0 (2019-11-14)
 
 
