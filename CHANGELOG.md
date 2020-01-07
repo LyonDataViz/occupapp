@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### [1.2.1](https://github.com/LyonDataViz/occupapp/compare/v1.2.0...v1.2.1) (2020-01-07)
 
 - [Online demo](https://occupapp-pvm53kc77.now.sh/)
+- [Tag](https://github.com/LyonDataViz/occupapp/tree/v1.2.1)
 - [Download](https://github.com/LyonDataViz/occupapp/releases/tag/v1.2.1)
 
 ### Features
@@ -21,6 +22,7 @@ All notable changes to this project will be documented in this file. See [standa
 ## [1.2.0](https://github.com/severo/occupapp/compare/v1.1.0...v1.2.0) (2019-12-20)
 
 - [Online demo](https://occupapp-khxo9ktm7.now.sh/)
+- [Tag](https://github.com/LyonDataViz/occupapp/tree/v1.2.0)
 - [Milestone](https://github.com/LyonDataViz/occupapp/milestone/4?closed=1)
 - [Download](https://github.com/LyonDataViz/occupapp/releases/tag/v1.2.0)
 
@@ -80,6 +82,7 @@ All notable changes to this project will be documented in this file. See [standa
 ## 1.1.0 (2019-11-14)
 
 - [Online demo](https://occupapp-qf17v5yfl.now.sh)
+- [Tag](https://github.com/LyonDataViz/occupapp/tree/v1.1.0)
 - [Milestone](https://github.com/LyonDataViz/occupapp/milestone/2?closed=1)
 - [Download](https://github.com/LyonDataViz/occupapp/releases/tag/v1.1.0)
 

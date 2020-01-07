@@ -6,6 +6,18 @@ Discover the space occupation of agents in a scene.
 
 https://occupapp.now.sh/
 
+## Versions
+
+Current version is deployed at https://occupapp.now.sh/, and follows the [master branch](https://github.com/LyonDataViz/occupapp/tree/master).
+
+Previous versions:
+
+- Occupapp v1.2.1 is deployed at https://occupapp-pvm53kc77.now.sh/, and corresponds to the [tag v1.2.1](https://github.com/LyonDataViz/occupapp/tree/v1.2.1).
+- Occupapp v1.2.0 is deployed at https://occupapp-khxo9ktm7.now.sh/, and corresponds to the [tag v1.2.0](https://github.com/LyonDataViz/occupapp/tree/v1.2.0).
+- Occupapp v1.1.0 is deployed at https://occupapp-qf17v5yfl.now.sh/, and corresponds to the [tag v1.1.0](https://github.com/LyonDataViz/occupapp/tree/v1.1.0).
+
+See [CHANGELOG.md](./CHANGELOG.md) for more details.
+
 ## Install
 
 - install
