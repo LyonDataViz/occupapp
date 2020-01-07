@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/LyonDataViz/occupapp/compare/v1.2.0...v1.2.1) (2020-01-07)
+
+
+### Features
+
+* add commit information and link ([f14767c](https://github.com/LyonDataViz/occupapp/commit/f14767c3863a36e8efe83b9853c345144323b335))
+
+
+### Bug Fixes
+
+* create version info even without git ([9c11799](https://github.com/LyonDataViz/occupapp/commit/9c117997b7eba85242c6e0533fcd31d0d9d5f94b))
+* downgrade typescript (asked by typescript-etree ([0fc424d](https://github.com/LyonDataViz/occupapp/commit/0fc424d8f963693cf421bce1297ce52047f55ddb))
+* fix use of now.sh environment variables ([cbd9cd5](https://github.com/LyonDataViz/occupapp/commit/cbd9cd5790a8ed0a8b404dc70e436a7ba6137766))
+
 ## [1.2.0](https://github.com/severo/occupapp/compare/v1.1.0...v1.2.0) (2019-12-20)
 
 
