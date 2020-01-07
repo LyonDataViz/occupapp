@@ -1,8 +1,12 @@
 const package = require('./package.json')
 
 const appVersion = package.version
-const appVersionUrl = `https://github.com/LyonDataViz/occupapp/blob/master/VERSIONS.md#v${appVersion.replace(/\./g, '')}`
 const gitRepositoryBaseUrl = package.repository.url.replace(/\.git$/, '')
+// Note: there is no way to get an anchor link to the specific version inside
+// CHANGELOG.md, because the anchors contain dates that cannot be computed
+// easily, eg:
+// https://github.com/LyonDataViz/occupapp/blob/master/CHANGELOG.md#120-2019-12-20
+const appVersionUrl = `${gitRepositoryBaseUrl}/blob/master/CHANGELOG.md`
 
 let gitVersion
 let gitVersionUrl

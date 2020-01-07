@@ -57,7 +57,11 @@ Other targets:
   npm run release
   ```
 
-  and edit [VERSIONS.md](./VERSIONS.md).
+  and then edit [CHANGELOG.md](./CHANGELOG.md) to add:
+
+  - Online demo URL: see https://zeit.co/lyondataviz/occupapp/deployments
+  - Issues milestone (if corresponding): see https://github.com/LyonDataViz/occupapp/milestones
+  - Zip download: see https://github.com/LyonDataViz/occupapp/releases
 
 Build upon Vue.js, see [Configuration Reference](https://cli.vuejs.org/config/).
 Use `vue upgrade` to keep your dependencies up to date (possibly after upgrading
