@@ -11,9 +11,11 @@
         height
       > Developed for the <a
         href="https://projet.liris.cnrs.fr/mi2/"
-      >M2i</a> project (<a
-        href="https://github.com/LyonDataViz/occupapp/blob/master/VERSIONS.md"
-      >v{{ appVersion }}</a>)
+      >M2i</a> project (version: <a
+        :href="appVersionUrl"
+      >{{ appVersion }}</a>, commit: <a
+        :href="gitUrl"
+      >{{ gitVersion }}</a>)
     </p>
   </div>
 </template>
@@ -36,7 +38,16 @@ import Component from 'vue-class-component'
 @Component
 export default class Infos extends Vue {
   get appVersion (): string {
-    return process.env.VERSION || 'undefined'
+    return process.env.INFOS_APP_VERSION || '???'
+  }
+  get appVersionUrl (): string {
+    return process.env.INFOS_APP_VERSION_URL || '???'
+  }
+  get gitVersion (): string {
+    return process.env.INFOS_GIT_VERSION || '???'
+  }
+  get gitUrl (): string {
+    return process.env.INFOS_GIT_VERSION_URL || '???'
   }
 }
 </script>
