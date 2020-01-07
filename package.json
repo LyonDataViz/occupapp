@@ -60,7 +60,7 @@
     "sass-loader": "^8.0.0",
     "standard-version": "^7.0.1",
     "typeface-roboto": "0.0.75",
-    "typescript": "^3.7.4",
+    "typescript": "^3.5.3",
     "vue-class-component": "^7.1.0",
     "vue-cli-plugin-vuetify": "^2.0.3",
     "vue-property-decorator": "^8.3.0",

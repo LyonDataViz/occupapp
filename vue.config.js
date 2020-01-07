@@ -1,6 +1,4 @@
-const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const package = require('./package.json')
-const gitRevisionPlugin = new GitRevisionPlugin()
 
 const appVersion = package.version
 const appVersionUrl = `https://github.com/LyonDataViz/occupapp/blob/master/VERSIONS.md#v${appVersion.replace(/\./g, '')}`
@@ -9,6 +7,8 @@ const gitRepositoryBaseUrl = package.repository.url.replace(/\.[^/.]+$/, '')
 let gitVersion
 let gitCommitHash
 try {
+  const GitRevisionPlugin = require('git-revision-webpack-plugin')
+  const gitRevisionPlugin = new GitRevisionPlugin()
   gitVersion = gitRevisionPlugin.version()
   gitCommitHash = gitRevisionPlugin.commithash()
 } catch (e) {
