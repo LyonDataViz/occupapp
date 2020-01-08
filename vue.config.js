@@ -30,7 +30,8 @@ if ('NOW_GITHUB_DEPLOYMENT' in process.env) {
   } catch (e) {
     // We must be in a case where
     // - the code has been exported from the git repository
-    // - AND it's not being deployed on now.sh
+    // - AND it's not being deployed on now.sh from the GitHub app
+    // One such possibility: when running "npm run deploy"!
     gitVersion = 'unknown'
     gitVersionUrl = gitRepositoryBaseUrl
   }
