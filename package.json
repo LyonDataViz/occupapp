@@ -58,7 +58,7 @@
     "now": "^16.7.1",
     "sass": "^1.24.2",
     "sass-loader": "^8.0.0",
-    "standard-version": "^7.0.1",
+    "standard-version": "^8.0.1",
     "typeface-roboto": "0.0.75",
     "typescript": "^3.5.3",
     "vue-class-component": "^7.1.0",
